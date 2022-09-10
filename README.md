@@ -1,9 +1,37 @@
 # padurarbot
-A python bot (w discord API). You may see a crappy local json database, ignore it
+A multifunctional python bot (w discord.py API). 
 
 Bot's main language: Romanian
 
-## Why is everything in the "pad" folder:
-Good question. I run the bot on my linux server directly from the "pad" folder.
+# Bot's functions:
+> Administration (mute,kick,ban,etx)
 
-If you'll ever run the bot on a server, it may not work as intended. The scripts are made to work in the "root/pad" folder (example: "root/pad/cogs/help.py"), it can be easily changed to "./cogs/help.py". You need to know this if you'll change the folder's name, i was too lazy to change it
+> Logging
+
+> Fun
+
+> Miscelanous
+
+
+
+# Important stuff:
+
+## How to config:
+> Inside the pad/main.py file insert your bot's token (Line 71)
+
+> Change the defined colors in the main file with an RGB code (Line 12 and 13)
+
+> Run pad/main.py
+
+> Use the `.setup` command to set up things such as the prefix, logging channel, etc
+
+###If you change the "pad" folder's name the bot won't work.
+
+## Why is everything in the "pad" folder:
+Good question. I run the bot on a Ubuntu server from the "pad" folder.
+
+If you'll ever run the bot on a server, it may not work as intended. The scripts are made to work in the "root/pad" folder (example: "root/pad/cogs/help.py"), it can be easily changed to "./cogs/help.py". You need to know this if you'll change the folder's name, i was just too lazy to change it
+
+## Where is the data saved:
+The data is saved in pad/data/data.json as a basic python dictionary ( {"key":"value", "key2":"value2"} )
+
