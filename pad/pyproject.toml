@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "repl_nix_PadurarV20"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+aiohttp = "^3.8.1"
+dblpy = "^0.4.0"
+imageio = "^2.21.0"
+orjson = "^3.7.11"
+requests = "^2.28.1"
+typing-extensions = "^4.3.0"
+yarl = "^1.7.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

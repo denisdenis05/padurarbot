@@ -4,13 +4,12 @@ import json
 import asyncio
 import re
 import datetime
-import discord_components
-from discord_components import DiscordComponents, Button, ButtonStyle, ActionRow
+from discord.ui import Button, View
 from discord.ext import commands
 from discord.ext import tasks
 from datetime import datetime
 from main import topxplist, paginaxp, timpdelatop
-
+from main import default_color
 
 class Rank(commands.Cog):
     def __init__(self, client):
@@ -34,10 +33,10 @@ class Rank(commands.Cog):
             voturis = int(data[f"voturis{member.id}"])
         embed = discord.Embed(title="",
                               description="**Numarul de [voturi pentru Pădurar](https://top.gg/bot/790607817128017920): **",
-                              color=discord.Color.green())
+                              color=default_color)
         embed.add_field(name=f'Voturi totale:', value=voturi)
         embed.add_field(name=f'Voturi in această săptămână:', value=voturis)
-        embed.set_footer(text=member, icon_url=member.avatar_url)
+        embed.set_footer(text=member, icon_url=member.avatar.url)
         embed.timestamp = datetime.utcnow()
         await ctx.reply(embed=embed)
 
@@ -46,7 +45,7 @@ class Rank(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             em = discord.Embed(title=f"HOOOO DOMNULE",
                                description=f" Ai de asteptat {error.retry_after:.2f} secunde pana poti vedea voturile iar",
-                               color=discord.Color.green())
+                               color=default_color)
             await ctx.reply(embed=em)
 
     @commands.command(aliases=['rank'])
@@ -60,10 +59,10 @@ class Rank(commands.Cog):
         if f"xp{ctx.guild.id}" not in data or data[f"xp{ctx.guild.id}"] == 0:
             embed = discord.Embed(title="Nu ai activat xp-ul pe acest server",
                                   description="Daca vrei sa il activezi, foloseste comanda `.setxp`",
-                                  color=discord.Color.green())
+                                  color=default_color)
             await ctx.reply(embed=embed)
             return
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
         if f"{ctx.guild.id}XP{member.id}" not in data:
             xp = 0
         else:
@@ -89,24 +88,23 @@ class Rank(commands.Cog):
         else:
             embed.add_field(name=f'Xp' + textxp, value=f"Domnul {member.mention} are {xp} puncte.")
 
-
-        match_keys={key:val for key, val in data.items() if key.startswith(f"{ctx.guild.id}rol")}
-        lista=()
+        match_keys = {key: val for key, val in data.items() if key.startswith(f"{ctx.guild.id}rol")}
+        lista = ()
         for k in match_keys:
-          if data[k]!=0:
-            lista=lista+(k,)
-        match_keys=lista
-        dictionar={}
+            if data[k] != 0:
+                lista = lista + (k,)
+        match_keys = lista
+        dictionar = {}
         for key in match_keys:
-          dictionar[int(data[key])]=int(data[f"rol{data[key]}"])
+            dictionar[int(data[key])] = int(data[f"rol{data[key]}"])
         sort = dict(sorted(dictionar.items(), key=lambda x: x[1]))
         for key in sort.items():
-          puncte=key[1]
-          if xp<puncte:
-            embed.set_footer(text=f"Urmatorul rol e deblocat la {puncte} puncte", icon_url=member.avatar_url)
-            await ctx.reply(embed=embed)
-            return
-        embed.set_footer(text="Ai deblocat toate rolurile", icon_url=member.avatar_url)
+            puncte = key[1]
+            if xp < puncte:
+                embed.set_footer(text=f"Urmatorul rol e deblocat la {puncte} puncte", icon_url=member.avatar.url)
+                await ctx.reply(embed=embed)
+                return
+        embed.set_footer(text="Ai deblocat toate rolurile", icon_url=member.avatar.url)
         await ctx.reply(embed=embed)
 
     @xp.error
@@ -114,7 +112,7 @@ class Rank(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             em = discord.Embed(title=f"HOOOO DOMNULE",
                                description=f" Ai de asteptat {error.retry_after:.2f} secunde pana poti cere rankul iar",
-                               color=discord.Color.green())
+                               color=default_color)
             await ctx.reply(embed=em)
 
     @commands.command()
@@ -142,7 +140,7 @@ class Rank(commands.Cog):
         if f"xp{ctx.guild.id}" not in data or data[f"xp{ctx.guild.id}"] == 0:
             embed = discord.Embed(title="Nu ai activat xp-ul pe acest server",
                                   description="Daca vrei sa il activezi, foloseste comanda `.setxp`",
-                                  color=discord.Color.green())
+                                  color=default_color)
             await ctx.reply(embed=embed)
             return
         if member == None:
@@ -174,7 +172,7 @@ class Rank(commands.Cog):
         if f"xp{ctx.guild.id}" not in data or data[f"xp{ctx.guild.id}"] == 0:
             embed = discord.Embed(title="Nu ai activat xp-ul pe acest server",
                                   description="Daca vrei sa il activezi, foloseste comanda `.setxp`",
-                                  color=discord.Color.green())
+                                  color=default_color)
             await ctx.reply(embed=embed)
             return
         if member == None:
@@ -199,7 +197,7 @@ class Rank(commands.Cog):
         if f"xp{ctx.guild.id}" not in data or data[f"xp{ctx.guild.id}"] == 0:
             embed = discord.Embed(title="Nu ai activat xp-ul pe acest server",
                                   description="Daca vrei sa il activezi, foloseste comanda `.setxp`",
-                                  color=discord.Color.green())
+                                  color=default_color)
             await ctx.reply(embed=embed)
             return
         if xp == 0:
@@ -223,36 +221,37 @@ class Rank(commands.Cog):
         if f"xp{ctx.guild.id}" not in data or data[f"xp{ctx.guild.id}"] == 0:
             embed = discord.Embed(title="Nu ai activat xp-ul pe acest server",
                                   description="Daca vrei sa il activezi, foloseste comanda `.setxp`",
-                                  color=discord.Color.green())
+                                  color=default_color)
             await ctx.reply(embed=embed)
             return
-        timpbun=0
+        timpbun = 0
         if ctx.guild.id in timpdelatop:
-          ultimtimp=datetime.strptime(timpdelatop[ctx.guild.id], '%Y-%m-%d %H:%M:%S.%f')
-          datacurenta=datetime.now()
-          timp=datacurenta-ultimtimp
-          if timp.seconds <180:
-            sort=topxplist[ctx.guild.id]
-            timpbun=1
-            print("sort preluat")
-        if timpbun==0:
-          match_keys = {key: val for key, val in data.items() if key.startswith(f"{ctx.guild.id}XP")}
-          dictionar = {}
-          for k in match_keys:
-            key = k.replace(f"{ctx.guild.id}XP", "")
-            dictionar[f"<@{key}>"] = data[k]
-          sort = sorted(dictionar.items(), key=lambda x: x[1], reverse=True)
-          topxplist[ctx.guild.id]=sort
-          timpdelatop[ctx.guild.id]=str(datetime.now())
-          print("sort refacut")
-        paginaxp[ctx.guild.id]=int(nr)
+            ultimtimp = datetime.strptime(timpdelatop[ctx.guild.id], '%Y-%m-%d %H:%M:%S.%f')
+            datacurenta = datetime.now()
+            timp = datacurenta - ultimtimp
+            if timp.seconds < 180:
+                sort = topxplist[ctx.guild.id]
+                timpbun = 1
+                print("sort preluat")
+        if timpbun == 0:
+            match_keys = {key: val for key, val in data.items() if key.startswith(f"{ctx.guild.id}XP")}
+            dictionar = {}
+            for k in match_keys:
+                key = k.replace(f"{ctx.guild.id}XP", "")
+                dictionar[f"<@{key}>"] = data[k]
+            sort = sorted(dictionar.items(), key=lambda x: x[1], reverse=True)
+            topxplist[ctx.guild.id] = sort
+            timpdelatop[ctx.guild.id] = str(datetime.now())
+            print("sort refacut")
+        paginaxp[ctx.guild.id] = int(nr)
         i = (nr - 1) * 10
         j = nr * 10
         if len(sort) < j:
             j = len(sort)
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
-        embed.set_author(name="Top puncte in padure",icon_url="https://cdn.discordapp.com/attachments/745384647885848594/864852166433570856/89a9a37af2f4387bc8293ae4dacfb4c4.jpg")
-        # embed = discord.Embed(title="Top puncte ", description="in padurea Baneasa", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
+        embed.set_author(name="Top puncte in padure",
+                         icon_url="https://cdn.discordapp.com/attachments/745384647885848594/864852166433570856/89a9a37af2f4387bc8293ae4dacfb4c4.jpg")
+        # embed = discord.Embed(title="Top puncte ", description="in padurea Baneasa", color=default_color)
         if i >= j:
             ctx.eroare
         while i < j:
@@ -275,26 +274,23 @@ class Rank(commands.Cog):
             icon_url="https://freepikpsd.com/media/2019/11/emoji-meme-png-4-Transparent-Images.png")
         embed.set_thumbnail(
             url="https://cdn.discordapp.com/attachments/745384647885848594/864473500257353788/830009449011871754.gif")
+        view = View()
         if nr == 1:
-            row = ActionRow(Button(label="⏮", style=3, custom_id="primultop", disabled=True),
-                            Button(label="⏪", style=3, custom_id="backtop", disabled=True),
-                            Button(label="⏩", style=3, custom_id="nexttop"),
-                            Button(label="⏭", style=3, custom_id="ultimultop"))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="primultop",emoji="⏮", disabled=True))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="backtop",emoji="⏪", disabled=True))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="nexttop",emoji="⏩"))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="ultimultop",emoji="⏭"))
         elif nr == int((len(sort) - 1) / 10):
-            row = ActionRow(Button(label="⏮", style=3, custom_id="primultop", disabled=True),
-                            Button(label="⏪", style=3, custom_id="backtop"),
-                            Button(label="⏩", style=3, custom_id="nexttop", disabled=True),
-                            Button(label="⏭", style=3, custom_id="ultimultop", disabled=True))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="primultop",emoji="⏮", disabled=True))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="backtop",emoji="⏪"))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="nexttop",emoji="⏩", disabled=True))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="ultimultop",emoji="⏭", disabled=True))
         else:
-            row = ActionRow(Button(label="⏮", style=3, custom_id="primultop", disabled=True),
-                            Button(label="⏪", style=3, custom_id="backtop"),
-                            Button(label="⏩", style=3, custom_id="nexttop"),
-                            Button(label="⏭", style=3, custom_id="ultimultop"))
-        msg = await ctx.send(embed=embed, components=[row])
-        await asyncio.sleep(180)
-        await msg.edit(embed=embed, components=[row])
-        okk = 0
-        
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="primultop",emoji="⏮", disabled=True))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="backtop",emoji="⏪"))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="nexttop",emoji="⏩"))
+            view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="ultimultop",emoji="⏭"))
+        msg = await ctx.send(embed=embed, view=view)
 
     @top.error
     async def top_error(self, ctx, error):
@@ -302,7 +298,7 @@ class Rank(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             em = discord.Embed(title=f"HOOOO DOMNULE",
                                description=f" Ai de asteptat {error.retry_after:.2f} secunde pana poti cere topul iar pe acest server",
-                               color=discord.Color.green())
+                               color=default_color)
             await ctx.reply(embed=em)
         else:
             await ctx.reply("Ceva n-a mers bine. Probabil ai introdus un numar de pagina prea mare sau prea mic")
@@ -325,7 +321,7 @@ class Rank(commands.Cog):
         j = nr * 5
         if len(sort) < j:
             j = len(sort)
-        embed = discord.Embed(title="Top bumps ", description="in padurea Baneasa", color=discord.Color.green())
+        embed = discord.Embed(title="Top bumps ", description="in padurea Baneasa", color=default_color)
         if i >= j:
             ctx.eroaree
         while i < j:
@@ -357,7 +353,7 @@ class Rank(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             em = discord.Embed(title=f"HOOOO DOMNULE",
                                description=f" Ai de asteptat {error.retry_after:.0f} secunde pana poti cere topul iar",
-                               color=discord.Color.green())
+                               color=default_color)
             await ctx.reply(embed=em)
         else:
             await ctx.send("Lmao nu cred ca sunt asa multe pagini")
@@ -386,5 +382,5 @@ class Rank(commands.Cog):
                 await ctx.reply(f"{membru} a dat {bumps} bump-uri.")
 
 
-def setup(client):
-    client.add_cog(Rank(client))
+async def setup(client):
+    await client.add_cog(Rank(client))

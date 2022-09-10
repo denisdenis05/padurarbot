@@ -1,9 +1,8 @@
 import discord
 import random
-import discord_components
-from discord_components import DiscordComponents, Button, ButtonStyle, ActionRow
 from discord.ext import commands
-
+from main import default_color
+from discord.ui import Button, View
 
 class Help(commands.Cog):
 
@@ -13,7 +12,7 @@ class Help(commands.Cog):
     @commands.group(invoke_without_command=True, aliases=['ajutor'])
     async def help(self, ctx):
         embed = discord.Embed(
-            title="Comenzi", description="", color=discord.Color.green())
+            title="Comenzi", description="", color=default_color)
         embed.add_field(name="Admin", value="Categorie pentru comenzile staffului", inline=True)
         embed.add_field(name="Utile", value="Categorie pentru comenzile utile", inline=True)
         embed.add_field(name="Set", value="Categorie pentru comenzile de setare a botului (pentru ownerii serverului)",
@@ -24,44 +23,17 @@ class Help(commands.Cog):
         # embed.add_field(name="Setup",value="`setup`, `prefix`, `setjoinleave`, `setlogs`, `setmembercount`, `setmute`, `setvoice`",inline=True)
         # embed.add_field(name="Amuzament",value="`birthday`, `cuddle`, `divort`, `facebook`, `fraier`, `gay`, `howgay`, `casatorie`, `party`, `pp`, `pup`, `ship`, `simp`, `sot`, `spune`, `tembel`, `wanted`, `imbratisare`, `palmă`, `limbă`, `supremacy`,`clan`",inline=True)
         embed.set_footer(text=f"Apasa pe butoanele de mai jos pentru mai multe informatii despre o categorie")
-        row = ActionRow(Button(label="Admin", style=2, custom_id="admin"),
-                        Button(label="Set", style=2, custom_id="setup"),
-                        Button(label="Utile", style=3, custom_id="utilitati"),
-                        Button(label="haZz", style=1, custom_id="amuzament"))
-        msg = await ctx.reply(embed=embed, components=[row])
-        while ctx.message != None:
-            try:
-                interaction = await self.client.wait_for("button_click", check=lambda i: (
-                            i.custom_id == "admin" or i.custom_id == "setup" or i.custom_id == "utilitati" or i.custom_id == "amuzament"),
-                                                         timeout=40)
-            except:
-                await msg.delete()
-                return
-            if interaction.custom_id == "admin":
-                embed = discord.Embed(title="Comenzi admin",
-                                      description="`addrole`, `removerole`, `adminspune`, `announcement`, `ban`, `kick`, `mute`, `purge`, `searchpurge`,  `setnick`, `softban`, `unban`",
-                                      color=discord.Color.green())
-                await interaction.send(embed=embed)
-            elif interaction.custom_id == "setup":
-                embed = discord.Embed(title="Comenzi setup",
-                                      description="`setup`, `prefix`, `setjoinleave`, `setlogs`, `setmembercount`, `setmute`, `setvoice`",
-                                      color=discord.Color.green())
-                await interaction.send(embed=embed)
-            elif interaction.custom_id == "utilitati":
-                embed = discord.Embed(title="Comenzi utile",
-                                      description="`alege`, `avatar`, `editsnipe`, `purge`, `random`, `invite`, `serveravatar`, `slowmode`, `snipe`, `xp`, `top`, `servere`, `membercount`,`whois`,`afk`",
-                                      color=discord.Color.green())
-                await interaction.send(embed=embed)
-            elif interaction.custom_id == "amuzament":
-                embed = discord.Embed(title="Comenzi amuzament",
-                                      description="`birthday`, `cuddle`, `divort`, `facebook`, `fraier`, `gay`, `howgay`, `casatorie`, `urbandictionary`, `party`, `pp`, `pup`, `ship`, `simp`, `sot`, `spune`, `tembel`, `wanted`, `imbratisare`, `palmă`, `limbă`, `supremacy`,`clan`,`kanye`,`messi`,`zamn`",
-                                      color=discord.Color.green())
-                await interaction.send(embed=embed)
+        view = View()    
+        view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="admin",label="Admin"))
+        view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="setup",label="Set"))
+        view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="utilitati",label="Utile"))
+        view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="amuzament",label="haZz"))
+        await ctx.reply(embed=embed, view=view)
 
     @help.command(aliases=['vocal', 'Voice'])
     async def voice(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(name="Comenzile voice", value="""Intra pe canalul INTRA AICI pentru a iti face un canal vocal temporar.
 
 **.voice limit [numar]** e o comanda care limitează numărul de persoane de pe un canal vocal. 
@@ -79,7 +51,7 @@ Ex:.voice name Cangur
     @help.command()
     async def purge(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .purge",
             value=
@@ -93,7 +65,7 @@ Ex:.voice name Cangur
     @help.command()
     async def afk(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .afk",
             value=
@@ -103,11 +75,11 @@ Ex:.voice name Cangur
     .afk Merg sa comit crime de razboi in Slatina""",
             inline=True)
         await ctx.reply(embed=embed)
-  
+
     @help.command()
     async def mute(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .mute",
             value=
@@ -119,24 +91,33 @@ Ex:.voice name Cangur
             inline=True)
         await ctx.reply(embed=embed)
 
-
     @help.command()
     async def clan(self, ctx):
         embed = discord.Embed(
-            title="**Comenzile `clan`", description="Comenzile `clan` fac parte dintr-un sistem prin care puteti sa va distrati cu prietenii. Acestea contin:**\n", color=discord.Color.green())
-        embed.add_field(name="Comanda `.creare clan`",value="Va permite sa va creati propriul clan, cu un nume ales. \nExemplu: `.creare clan Smecherii`, comanda va creeaza clanul 'Smecherii'",inline=False)
-        embed.add_field(name="Comanda `.intra clan`",value="Va permite sa intrati intr-un clan existent, precizand numele acestuia. \nExemplu: `.intra clan Smecherii`, comanda va trimie o cerere de intrare liderului clanului 'Smecherii'",inline=False)
-        embed.add_field(name="Comanda `.accept clan`",value="Permite accesul unui membru in clanul tau (valabil exclusiv pentru liderii clanului, doar daca membrul a depus o cerere de intrare in clan). \nExemplu: `.accept clan @Denis`, comanda il va baga automat pe @Denis in clan.",inline=False)
-        embed.add_field(name="Comanda `.iesire clan`",value="Va permite sa iesiti dintr-un clan, precizand numele acestuia. \nExemplu: `.iesire clan 'Smecherii'`, comanda va va elimina din clan.",inline=False)
-        embed.add_field(name="Comanda `.inchide clan`",value="Va permite sa stergeti clanul in care sunteti (doar daca sunteti liderul clanului.)\nExemplu: `.inchide clan`, comanda va trimite un mesaj de confirmare, apoi va sterge clanul daca este confirmata stergerea.",inline=False)
+            title="**Comenzile `clan`",
+            description="Comenzile `clan` fac parte dintr-un sistem prin care puteti sa va distrati cu prietenii. Acestea contin:**\n",
+            color=default_color)
+        embed.add_field(name="Comanda `.creare clan`",
+                        value="Va permite sa va creati propriul clan, cu un nume ales. \nExemplu: `.creare clan Smecherii`, comanda va creeaza clanul 'Smecherii'",
+                        inline=False)
+        embed.add_field(name="Comanda `.intra clan`",
+                        value="Va permite sa intrati intr-un clan existent, precizand numele acestuia. \nExemplu: `.intra clan Smecherii`, comanda va trimie o cerere de intrare liderului clanului 'Smecherii'",
+                        inline=False)
+        embed.add_field(name="Comanda `.accept clan`",
+                        value="Permite accesul unui membru in clanul tau (valabil exclusiv pentru liderii clanului, doar daca membrul a depus o cerere de intrare in clan). \nExemplu: `.accept clan @Denis`, comanda il va baga automat pe @Denis in clan.",
+                        inline=False)
+        embed.add_field(name="Comanda `.iesire clan`",
+                        value="Va permite sa iesiti dintr-un clan, precizand numele acestuia. \nExemplu: `.iesire clan 'Smecherii'`, comanda va va elimina din clan.",
+                        inline=False)
+        embed.add_field(name="Comanda `.inchide clan`",
+                        value="Va permite sa stergeti clanul in care sunteti (doar daca sunteti liderul clanului.)\nExemplu: `.inchide clan`, comanda va trimite un mesaj de confirmare, apoi va sterge clanul daca este confirmata stergerea.",
+                        inline=False)
         await ctx.reply(embed=embed)
 
-
-  
     @help.command()
     async def unmute(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .unmute",
             value=
@@ -152,7 +133,7 @@ Ex:.voice name Cangur
     @help.command(aliases=['av', 'Av', 'Avatar'])
     async def avatar(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .avatar",
             value=
@@ -167,7 +148,7 @@ Ex:.voice name Cangur
     @help.command()
     async def kick(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .kick",
             value=
@@ -182,7 +163,7 @@ Ex:.voice name Cangur
     @help.command()
     async def snipe(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .snipe",
             value=
@@ -196,7 +177,7 @@ Ex:.voice name Cangur
     @help.command(aliases=['roleadd'])
     async def addrole(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .addrole",
             value=
@@ -210,7 +191,7 @@ Ex:.voice name Cangur
     @help.command(aliases=['roleremove'])
     async def removerole(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .removerole",
             value=
@@ -224,7 +205,7 @@ Ex:.voice name Cangur
     @help.command(aliases=['casatorie'])
     async def marry(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .casatorie",
             value=
@@ -239,7 +220,7 @@ Ex:.voice name Cangur
     @help.command(aliases=['staffwarn'])
     async def warn(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda . warn",
             value=
@@ -253,7 +234,7 @@ Ex:.voice name Cangur
     @help.command(aliases=['staffwarns'])
     async def warns(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda . warns",
             value=
@@ -267,7 +248,7 @@ Ex:.voice name Cangur
     @help.command()
     async def warnlist(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda . warnlist",
             value=
@@ -279,7 +260,7 @@ Ex:.voice name Cangur
     @help.command()
     async def delwarn(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda . delwarn",
             value=
@@ -293,7 +274,7 @@ Ex:.voice name Cangur
     @help.command()
     async def remove(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda . remove",
             value=
@@ -307,7 +288,7 @@ Ex:.voice name Cangur
     @help.command()
     async def avertisment(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda . avertisment",
             value=
@@ -321,7 +302,7 @@ Ex:.voice name Cangur
     @help.command()
     async def wanted(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda . wanted",
             value=
@@ -335,7 +316,7 @@ Ex:.voice name Cangur
     @help.command()
     async def tembel(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .tembel",
             value=
@@ -349,7 +330,7 @@ Ex:.voice name Cangur
     @help.command()
     async def gay(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda . gay",
             value=
@@ -363,14 +344,14 @@ Ex:.voice name Cangur
     @help.command(aliases=['divorce'])
     async def divort(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .divort",
             value=
             """Descriere: divortezi de persoana cu care esti casatorita .
-    
+
             !Atentie! nu va fi nicio verificare 
-    
+
     Exemplu:
     .divort""",
             inline=True)
@@ -379,7 +360,7 @@ Ex:.voice name Cangur
     @help.command()
     async def accept(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .accept",
             value=
@@ -393,7 +374,7 @@ Ex:.voice name Cangur
     @help.command()
     async def refuz(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .refuz",
             value=
@@ -407,7 +388,7 @@ Ex:.voice name Cangur
     @help.command()
     async def editsnipe(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .editsnipe",
             value=
@@ -419,7 +400,7 @@ Ex:.voice name Cangur
     @help.command()
     async def serveravatar(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .serveravatar",
             value=
@@ -431,7 +412,7 @@ Ex:.voice name Cangur
     @help.command()
     async def savatar(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .serveravatar",
             value=
@@ -443,7 +424,7 @@ Ex:.voice name Cangur
     @help.command()
     async def servere(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .servere",
             value=
@@ -455,7 +436,7 @@ Ex:.voice name Cangur
     @help.command()
     async def random(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .random",
             value=
@@ -469,7 +450,7 @@ Ex:.voice name Cangur
     @help.command()
     async def sugestie(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .sugestie",
             value=
@@ -483,7 +464,7 @@ Ex:.voice name Cangur
     @help.command()
     async def suggest(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .sugestie",
             value=
@@ -497,7 +478,7 @@ Ex:.voice name Cangur
     @help.command()
     async def suggestion(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .sugestie",
             value=
@@ -511,7 +492,7 @@ Ex:.voice name Cangur
     @help.command()
     async def whois(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .whois",
             value=
@@ -525,7 +506,7 @@ Ex:.voice name Cangur
     @help.command()
     async def fraier(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .fraier",
             value=
@@ -539,7 +520,7 @@ Ex:.voice name Cangur
     @help.command()
     async def gayrate(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .gay",
             value=
@@ -553,7 +534,7 @@ Ex:.voice name Cangur
     @help.command()
     async def howgay(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .gay",
             value=
@@ -567,7 +548,7 @@ Ex:.voice name Cangur
     @help.command()
     async def pp(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .pp",
             value=
@@ -581,7 +562,7 @@ Ex:.voice name Cangur
     @help.command()
     async def dick(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .pp",
             value=
@@ -595,7 +576,7 @@ Ex:.voice name Cangur
     @help.command()
     async def pula(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .pp",
             value=
@@ -609,7 +590,7 @@ Ex:.voice name Cangur
     @help.command()
     async def pup(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .pup",
             value=
@@ -623,7 +604,7 @@ Ex:.voice name Cangur
     @help.command()
     async def pwp(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .pup",
             value=
@@ -637,7 +618,7 @@ Ex:.voice name Cangur
     @help.command()
     async def kiss(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .pup",
             value=
@@ -651,7 +632,7 @@ Ex:.voice name Cangur
     @help.command()
     async def ship(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .ship",
             value=
@@ -665,7 +646,7 @@ Ex:.voice name Cangur
     @help.command(aliases=['say'])
     async def spune(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .spune",
             value=
@@ -679,7 +660,7 @@ Ex:.voice name Cangur
     @help.command()
     async def ban(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .ban",
             value=
@@ -694,7 +675,7 @@ Ex:.voice name Cangur
     @help.command()
     async def softban(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .softban",
             value=
@@ -709,7 +690,7 @@ Ex:.voice name Cangur
     @help.command()
     async def unban(self, ctx):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Comanda .unban",
             value=
@@ -723,5 +704,5 @@ Ex:.voice name Cangur
         await ctx.reply(embed=embed)
 
 
-def setup(client):
-    client.add_cog(Help(client))
+async def setup(client):
+    await client.add_cog(Help(client))

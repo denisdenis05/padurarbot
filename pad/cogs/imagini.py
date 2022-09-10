@@ -1,4 +1,5 @@
 import discord
+import imageio
 import random
 import json
 import re
@@ -11,18 +12,140 @@ from io import BytesIO
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
-
+from main import default_color
 
 class Imagini(commands.Cog):
     def __init__(self, client):
         self.client = client
 
     @commands.command()
+    async def furry(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        # 0
+        wanted0 = Image.open("pad/fisiere/imagini/furry.png")
+        wanted0.save("pad/temp/profile0.png")
+
+        # 1
+        wanted1 = Image.open("pad/fisiere/imagini/furry.png")
+        avatar1 = member.avatar.replace(size=128)
+        data = BytesIO(await avatar1.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((100, 100))
+        wanted1.paste(pfp, (2, 20))
+        wanted1.save("pad/temp/profile1.png")
+        # await ctx.reply(file=discord.File("profile.png"))
+        # os.remove("profile.png")
+        print("ceva")
+        # 2
+        wanted2 = Image.open("pad/fisiere/imagini/furry.png")
+        avatar1 = member.avatar.replace(size=128)
+        data = BytesIO(await avatar1.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((100, 100))
+        wanted2.paste(pfp, (60, 65))
+        wanted2.save("pad/temp/profile2.png")
+        # await ctx.reply(file=discord.File("profile.png"))
+        # os.remove("profile.png")
+        print("ceva")
+        # 3
+        wanted3 = Image.open("pad/fisiere/imagini/furry.png")
+        avatar1 = member.avatar.replace(size=128)
+        data = BytesIO(await avatar1.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((100, 100))
+        wanted3.paste(pfp, (130, 110))
+        wanted3.save("pad/temp/profile3.png")
+        # await ctx.reply(file=discord.File("profile.png"))
+        # os.remove("profile.png")
+        print("ceva")
+        # 4
+        wanted4 = Image.open("pad/fisiere/imagini/furry.png")
+        avatar1 = member.avatar.replace(size=128)
+        data = BytesIO(await avatar1.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((100, 100))
+        wanted4.paste(pfp, (200, 155))
+        wanted4.save("pad/temp/profile4.png")
+        # await ctx.reply(file=discord.File("profile.png"))
+        # os.remove("pad/profile.png")
+        print("ceva")
+        # 5
+        wanted5 = Image.open("pad/fisiere/imagini/furry.png")
+        avatar1 = member.avatar.replace(size=128)
+        data = BytesIO(await avatar1.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((100, 100))
+        wanted5.paste(pfp, (270, 200))
+        wanted5.save("pad/temp/profile5.png")
+        # await ctx.reply(file=discord.File("profile.png"))
+        # os.remove("profile.png")
+        print("ceva")
+        # 6
+        wanted6 = Image.open("pad/fisiere/imagini/furry.png")
+        avatar1 = member.avatar.replace(size=128)
+        data = BytesIO(await avatar1.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((100, 100))
+        wanted6.paste(pfp, (250, 250))
+        wanted6.save("pad/temp/profile6.png")
+        # await ctx.reply(file=discord.File("profile.png"))
+        # os.remove("profile.png")
+        print("ceva")
+        # 7
+        wanted7 = Image.open("pad/fisiere/imagini/furry.png")
+        avatar1 = member.avatar.replace(size=128)
+        data = BytesIO(await avatar1.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((100, 100))
+        wanted7.paste(pfp, (230, 300))
+        wanted7.save("pad/temp/profile7.png")
+        # await ctx.reply(file=discord.File("profile.png"))
+        # os.remove("profile.png")
+        print("ceva")
+        # 8
+        wanted8 = Image.open("pad/fisiere/imagini/furry.png")
+        avatar1 = member.avatar.replace(size=128)
+        data = BytesIO(await avatar1.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((100, 100))
+        wanted8.paste(pfp, (210, 350))
+        wanted8.save("pad/temp/profile8.png")
+        # await ctx.reply(file=discord.File("profile.png"))
+        # os.remove("profile.png")
+        print("ceva")
+        # 9
+        wanted9 = Image.open("pad/fisiere/imagini/furry.png")
+        avatar1 = member.avatar.replace(size=128)
+        data = BytesIO(await avatar1.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((100, 100))
+        wanted9.paste(pfp, (190, 400))
+        wanted9.save("pad/temp/profile9.png")
+        # await ctx.reply(file=discord.File("profile.png"))
+        # os.remove("profile.png")
+        print("ceva")
+        imgs = (wanted0, wanted1, wanted2, wanted3, wanted4, wanted5, wanted6, wanted7, wanted8, wanted9)
+        wanted0.save('movie.gif', save_all=True, append_images=imgs, optimize=False, duration=60, loop=0)
+        await ctx.reply(file=discord.File("movie.gif"))
+        os.remove("movie.gif")
+        os.remove("pad/temp/profile0.png")
+        os.remove("pad/temp/profile1.png")
+        os.remove("pad/temp/profile2.png")
+        os.remove("pad/temp/profile3.png")
+        os.remove("pad/temp/profile4.png")
+        os.remove("pad/temp/profile5.png")
+        os.remove("pad/temp/profile6.png")
+        os.remove("pad/temp/profile7.png")
+        os.remove("pad/temp/profile8.png")
+        os.remove("pad/temp/profile9.png")
+
+    @commands.command()
     async def wanted(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
         wanted = Image.open("pad/fisiere/imagini/wanted.jpg")
-        avatar1 = member.avatar_url_as(size=128)
+        avatar1 = member.avatar.replace(size=128)
         data = BytesIO(await avatar1.read())
         pfp = Image.open(data)
         pfp = pfp.resize((100, 100))
@@ -32,29 +155,35 @@ class Imagini(commands.Cog):
         os.remove("profile.jpg")
         print("ceva")
 
-
     @commands.command()
     async def ben(self, ctx, *, intrebare):
-      embed = discord.Embed(title=f"Ben raspunde la intrebarea:",description=intrebare ,color=discord.Color.green())
-      if "BLACK" in str(intrebare).upper() or "NIGG" in str(intrebare).upper() or "BLM" in str(intrebare).upper() or "RACIST" in str(intrebare).upper() or "RASIST" in str(intrebare).upper():
-        embed.set_image(url="https://cdn.discordapp.com/attachments/920425074882904104/950081866554277929/blackben.png")
-        await ctx.reply(embed=embed)
-        return
+        embed = discord.Embed(title=f"Ben raspunde la intrebarea:", description=intrebare, color=default_color)
+        if "BLACK" in str(intrebare).upper() or "NIGG" in str(intrebare).upper() or "BLM" in str(
+                intrebare).upper() or "RACIST" in str(intrebare).upper() or "RASIST" in str(intrebare).upper():
+            embed.set_image(
+                url="https://cdn.discordapp.com/attachments/920425074882904104/950081866554277929/blackben.png")
+            await ctx.reply(embed=embed)
+            return
 
-      if "LEAN" in str(intrebare).upper():
-        embed.set_image(url="https://cdn.discordapp.com/attachments/920425074882904104/951223110101774446/artworks-KJ1dWrMtmKvrEDUi-mHUUdw-t240x240.jpg")
+        if "LEAN" in str(intrebare).upper():
+            embed.set_image(
+                url="https://cdn.discordapp.com/attachments/920425074882904104/951223110101774446/artworks-KJ1dWrMtmKvrEDUi-mHUUdw-t240x240.jpg")
+            await ctx.reply(embed=embed)
+            return
+        rand = randint(1, 4)
+        if rand == 1:
+            embed.set_image(
+                url="https://cdn.discordapp.com/attachments/920425074882904104/950081866252292186/yesben.png")
+        elif rand == 2:
+            embed.set_image(
+                url="https://cdn.discordapp.com/attachments/920425074882904104/950081865962889216/noben.png")
+        elif rand == 3:
+            embed.set_image(
+                url="https://cdn.discordapp.com/attachments/920425074882904104/950081865564434442/hohoben.png")
+        elif rand == 4:
+            embed.set_image(
+                url="https://cdn.discordapp.com/attachments/920425074882904104/950081865140797440/blblben.png")
         await ctx.reply(embed=embed)
-        return
-      rand=randint(1,4)
-      if rand==1:
-        embed.set_image(url="https://cdn.discordapp.com/attachments/920425074882904104/950081866252292186/yesben.png")
-      elif rand==2:
-        embed.set_image(url="https://cdn.discordapp.com/attachments/920425074882904104/950081865962889216/noben.png")
-      elif rand==3:
-        embed.set_image(url="https://cdn.discordapp.com/attachments/920425074882904104/950081865564434442/hohoben.png")
-      elif rand==4:
-        embed.set_image(url="https://cdn.discordapp.com/attachments/920425074882904104/950081865140797440/blblben.png")
-      await ctx.reply(embed=embed)
 
     @commands.command()
     async def kanye(self, ctx, member: discord.Member = None):
@@ -72,25 +201,23 @@ class Imagini(commands.Cog):
             pfp = avatar1
             pfp = pfp.resize((300, 400))
             wanted.paste(pfp, (220, 370))
-            wanted.paste(kanyemaini, (0,0), kanyemaini)
+            wanted.paste(kanyemaini, (0, 0), kanyemaini)
             wanted.save("profile.png")
             await ctx.reply(file=discord.File("profile.png"))
             os.remove("profile.png")
             os.remove("avatar.jpg")
             print("ceva")
             return
-        avatar1 = member.avatar_url_as(size=128)
+        avatar1 = member.avatar.replace(size=128)
         data = BytesIO(await avatar1.read())
         pfp = Image.open(data)
         pfp = pfp.resize((300, 400))
         wanted.paste(pfp, (220, 370))
-        wanted.paste(kanyemaini, (0,0), kanyemaini)
+        wanted.paste(kanyemaini, (0, 0), kanyemaini)
         wanted.save("profile.png")
         await ctx.reply(file=discord.File("profile.png"))
         os.remove("profile.png")
         print("ceva")
-
-
 
     @commands.command(aliases=['mesi'])
     async def messi(self, ctx, member: discord.Member = None):
@@ -113,7 +240,7 @@ class Imagini(commands.Cog):
             os.remove("avatar.jpg")
             print("ceva")
             return
-        avatar1 = member.avatar_url_as(size=128)
+        avatar1 = member.avatar.replace(size=128)
         data = BytesIO(await avatar1.read())
         pfp = Image.open(data)
         pfp = pfp.resize((300, 400))
@@ -122,7 +249,7 @@ class Imagini(commands.Cog):
         await ctx.reply(file=discord.File("profile.jpg"))
         os.remove("profile.jpg")
         print("ceva")
-  
+
     @commands.command(aliases=['12'])
     async def zamn(self, ctx, member: discord.Member = None):
         if member == None:
@@ -144,7 +271,7 @@ class Imagini(commands.Cog):
             os.remove("avatar.jpg")
             print("ceva")
             return
-        avatar1 = member.avatar_url_as(size=128)
+        avatar1 = member.avatar.replace(size=128)
         data = BytesIO(await avatar1.read())
         pfp = Image.open(data)
         pfp = pfp.resize((100, 150))
@@ -153,7 +280,6 @@ class Imagini(commands.Cog):
         await ctx.reply(file=discord.File("profile.jpg"))
         os.remove("profile.jpg")
         print("ceva")
-      
 
     @commands.command()
     async def tembel(self, ctx, member: discord.Member = None):
@@ -176,7 +302,7 @@ class Imagini(commands.Cog):
             os.remove("avatar.jpg")
             print("ceva")
             return
-        avatar1 = member.avatar_url_as(size=128)
+        avatar1 = member.avatar.replace(size=128)
         data = BytesIO(await avatar1.read())
         pfp = Image.open(data)
         pfp = pfp.resize((220, 220))
@@ -207,7 +333,7 @@ class Imagini(commands.Cog):
             os.remove("avatar.jpg")
             print("ceva")
         else:
-            avatar1 = member.avatar_url_as(size=128)
+            avatar1 = member.avatar.replace(size=128)
             data = BytesIO(await avatar1.read())
             pfp = Image.open(data)
             pfp = pfp.resize((503, 503))
@@ -242,7 +368,7 @@ class Imagini(commands.Cog):
             os.remove("avatar.jpg")
             print("ceva")
             return
-        avatar1 = member.avatar_url_as(size=128)
+        avatar1 = member.avatar.replace(size=128)
         data = BytesIO(await avatar1.read())
         pfp = Image.open(data)
         pfp = pfp.resize((400, 400))
@@ -258,7 +384,7 @@ class Imagini(commands.Cog):
     @commands.command(aliases=['fb'])
     async def facebook(self, ctx, member: discord.Member = None, *, text):
         wanted = Image.open("pad/fisiere/imagini/facebook.jpg")
-        avatar1 = member.avatar_url_as(size=128)
+        avatar1 = member.avatar.replace(size=128)
         data = BytesIO(await avatar1.read())
         pfp = Image.open(data)
         pfp = pfp.resize((42, 42))
@@ -300,5 +426,5 @@ class Imagini(commands.Cog):
         await ctx.reply("**.facebook @persoana text**, te rog.")
 
 
-def setup(client):
-    client.add_cog(Imagini(client))
+async def setup(client):
+    await client.add_cog(Imagini(client))

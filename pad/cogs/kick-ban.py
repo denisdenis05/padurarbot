@@ -4,10 +4,10 @@ import json
 import re
 import asyncio
 import datetime
-from main import timeout_user
+from datetime import timedelta
 from discord.ext import commands
 from discord.utils import get
-
+from main import default_color
 
 class KickBan(commands.Cog):
     def __init__(self, client):
@@ -22,7 +22,7 @@ class KickBan(commands.Cog):
         if member == None:
             embed = discord.Embed(title="",
                                   description="",
-                                  color=discord.Color.green())
+                                  color=default_color)
             embed.add_field(
                 name="Comanda .kick",
                 value=
@@ -34,19 +34,10 @@ Exemplu:
             await ctx.reply(embed=embed)
             return
         guild = member.guild
-        staff = discord.utils.get(guild.roles, name='✴ | Discord Staff')
-        fond = discord.utils.get(guild.roles, name='✴ | Fondator')
-        bot = discord.utils.get(guild.roles, name='Bot')
-        padurar = discord.utils.get(guild.roles, name='Padurar la Băneasa')
-        if fond not in ctx.author.roles:
-            if (staff in member.roles
-                or bot in member.roles) or padurar in member.roles:
-                ctx.eroareeeedcnu
-                return
         await ctx.channel.purge(limit=1)
         embed = discord.Embed(title="",
                               description="",
-                              color=discord.Color.green())
+                              color=default_color)
         if reason != "":
             embed.add_field(name="O luat kick!!!!!!", value=f'Domnul {member} a fost dat afara. Motiv : {reason} ',
                             inline=True)
@@ -97,14 +88,14 @@ Exemplu:
             return
         if member != None and nick == None:
             embed = discord.Embed(
-                title="", description="", color=discord.Color.green())
+                title="", description="", color=default_color)
             embed.add_field(name="Wtf", value="Ce nickname dai ?")
             await ctx.reply(embed=embed)
             return
         lastnick = member.display_name
         await member.edit(nick=nick)
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Nickname schimbat", value=f"Ai schimbat numele lui {member}")
         await ctx.reply(embed=embed)
@@ -125,7 +116,7 @@ Exemplu:
 
     @setnick.error
     async def setnick_error(self, ctx, error):
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
         embed.add_field(name="Unde te crezi mă???", value=f'Mânuța că nu e voie !!!!', inline=True)
         await ctx.reply(embed=embed)
 
@@ -137,20 +128,20 @@ Exemplu:
         member=ctx.author
         if member != None and nick == None:
             embed = discord.Embed(
-                title="", description="", color=discord.Color.green())
+                title="", description="", color=default_color)
             embed.add_field(name="Wtf", value="Ce nickname iei?")
             await ctx.reply(embed=embed)
             return
         lastnick = member.display_name
         await member.edit(nick=nick)
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Nickname schimbat", value=f"Ti-ai schimbat numele in {nick}")
         await ctx.reply(embed=embed)
     @nick.error
     async def nick_error(self, ctx, error):
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
         embed.add_field(name="HAHAHAHAHAH??", value=f'N-ai permisiune prietene.', inline=True)
         await ctx.reply(embed=embed)
 
@@ -159,7 +150,7 @@ Exemplu:
     async def addrole(self, ctx, member: discord.Member = None, *, role=""):
         if member == None:
             embed = discord.Embed(
-                title="", description="", color=discord.Color.green())
+                title="", description="", color=default_color)
             embed.add_field(
                 name="Comanda .addrole/.roleadd",
                 value=
@@ -181,7 +172,7 @@ Exemplu:
         else:
             await member.add_roles(discord.utils.get(member.guild.roles, name=role))
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Rol adaugat", value=f"I-ai dat lui {member} rolul de {role}")
         await ctx.reply(embed=embed)
@@ -205,7 +196,7 @@ Exemplu:
     async def slowmode(self, ctx, seconds: int):
         await ctx.channel.edit(slowmode_delay=seconds)
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         if seconds == 0:
             embed.add_field(
                 name="Okok nu mai e slowmode",
@@ -225,7 +216,7 @@ Exemplu:
     async def removerole(self, ctx, member: discord.Member = None, *, role=""):
         if member == None:
             embed = discord.Embed(
-                title="", description="", color=discord.Color.green())
+                title="", description="", color=default_color)
             embed.add_field(
                 name="Comanda .removerole/.roleremove",
                 value=
@@ -248,7 +239,7 @@ Exemplu:
         else:
             await member.remove_roles(discord.utils.get(member.guild.roles, name=role))
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Rol sters", value=f"I-ai sters lui {member} rolul de {role}")
         await ctx.reply(embed=embed)
@@ -271,7 +262,7 @@ Exemplu:
     async def kick_error(self, ctx, error):
         embed = discord.Embed(title="",
                               description="",
-                              color=discord.Color.green())
+                              color=default_color)
         embed.add_field(name="Unde te crezi mă???",
                         value=f'Mânuța că nu e voie !!!!',
                         inline=True)
@@ -283,7 +274,7 @@ Exemplu:
         if member == None:
             embed = discord.Embed(title="",
                                   description="",
-                                  color=discord.Color.green())
+                                  color=default_color)
             embed.add_field(
                 name="Comanda .raidban",
                 value=
@@ -300,7 +291,7 @@ Folosire: .raidban
             if suspectraid in member.roles:
                 embed = discord.Embed(title="",
                                       description="",
-                                      color=discord.Color.green())
+                                      color=default_color)
                 await member.ban(reason="RAID")
                 embed.add_field(name="A fost banat!!!!",
                                 value=f'Domnul {member} a luat ban . Motiv : RAID',
@@ -329,7 +320,7 @@ Folosire: .raidban
         if member == None:
             embed = discord.Embed(title="",
                                   description="",
-                                  color=discord.Color.green())
+                                  color=default_color)
             embed.add_field(
                 name="Comanda .ban",
                 value=
@@ -341,19 +332,10 @@ Exemplu:
             await ctx.send(embed=embed)
             return
         guild = member.guild
-        staff = discord.utils.get(guild.roles, name='✴ | Discord Staff')
-        bot = discord.utils.get(guild.roles, name='Bot')
-        padurar = discord.utils.get(guild.roles, name='Padurar la Băneasa')
-        fond = discord.utils.get(guild.roles, name='✴ | Fondator')
-        if fond not in ctx.author.roles:
-            if (staff in member.roles
-                or bot in member.roles) or padurar in member.roles:
-                ctx.eroareeeedcnu
-                return
         await ctx.channel.purge(limit=1)
         embed = discord.Embed(title="",
                               description="",
-                              color=discord.Color.green())
+                              color=default_color)
         await member.ban(reason=reason)
         if reason != "":
             embed.add_field(name="A fost banat!!!!",
@@ -397,7 +379,7 @@ Exemplu:
     async def ban_error(self, ctx, error):
         embed = discord.Embed(title="",
                               description="",
-                              color=discord.Color.green())
+                              color=default_color)
         embed.add_field(name="Unde te crezi mă???",
                         value=f'Mânuța că nu e voie !!!!',
                         inline=True)
@@ -409,7 +391,7 @@ Exemplu:
         if member == None:
             embed = discord.Embed(title="",
                                   description="",
-                                  color=discord.Color.green())
+                                  color=default_color)
             embed.add_field(
                 name="Comanda .softban",
                 value=
@@ -421,19 +403,10 @@ Exemplu:
             await ctx.reply(embed=embed)
             return
         guild = member.guild
-        staff = discord.utils.get(guild.roles, name='✴ | Discord Staff')
-        bot = discord.utils.get(guild.roles, name='Bot')
-        padurar = discord.utils.get(guild.roles, name='Padurar la Băneasa')
-        fond = discord.utils.get(guild.roles, name='✴ | Fondator')
-        if fond not in ctx.author.roles:
-            if (staff in member.roles
-                or bot in member.roles) or padurar in member.roles:
-                ctx.eroareeeedcnu
-                return
         await ctx.channel.purge(limit=1)
         embed = discord.Embed(title="",
                               description="",
-                              color=discord.Color.green())
+                              color=default_color)
         await member.ban(reason=reason)
         await member.unban(reason=reason)
         if reason != "":
@@ -471,7 +444,7 @@ Exemplu:
     async def unban(self, ctx, id: int = 0, *, reason=""):
         if id == 0:
             embed = discord.Embed(
-                title="", description="", color=discord.Color.green())
+                title="", description="", color=default_color)
             embed.add_field(
                 name="Comanda .unban",
                 value=
@@ -485,7 +458,7 @@ Exemplu:
             return
         await ctx.channel.purge(limit=1)
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         user = await self.client.fetch_user(id)
         embed.add_field(
             name="Unban", value=f'Domnul {user} a primit unban .', inline=True)
@@ -507,7 +480,7 @@ Exemplu:
     @unban.error
     async def unban_error(self, ctx, error):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Unde te crezi mă???",
             value=f'Mânuța că nu e voie !!!!',
@@ -530,7 +503,7 @@ Exemplu:
     async def purge(self, ctx, ammount=0):
         if ammount == 0:
             embed = discord.Embed(
-                title="", description="", color=discord.Color.green())
+                title="", description="", color=default_color)
             embed.add_field(
                 name="Comanda .purge",
                 value=
@@ -541,7 +514,7 @@ Exemplu:
             await ctx.send(embed=embed)
             return
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Mesaje sterse",
             value=f'{ammount} mesaje au fost șterse',
@@ -565,7 +538,7 @@ Exemplu:
     @purge.error
     async def purge_error(self, ctx, error):
         embed = discord.Embed(
-            title="", description="", color=discord.Color.green())
+            title="", description="", color=default_color)
         embed.add_field(
             name="Unde te crezi mă???",
             value=f'Mânuța că nu e voie !!!!',
@@ -576,7 +549,7 @@ Exemplu:
     async def sotban_error(self, ctx, error):
         embed = discord.Embed(title="",
                               description="",
-                              color=discord.Color.green())
+                              color=default_color)
         embed.add_field(name="Unde te crezi mă???",
                         value=f'Mânuța că nu e voie !!!!',
                         inline=True)
@@ -587,7 +560,7 @@ Exemplu:
     @commands.has_permissions(manage_messages=True)
     async def mute(self,ctx: commands.Context, member: discord.Member = None, mute_minutes=None, *, reason=""):
       if member == None:
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
         embed.add_field(name="Comanda .mute", value="""Descriere: Este folosită în cazul în care un membru încalcă regulamentul intern al acestui server, este setat în minute.
     Folosire: .mute [nume] [timpul sancțiunii+u.m.] [motiv]
     Exemplu:
@@ -636,31 +609,29 @@ Exemplu:
         mute_minutes = mute_minutes.replace("O", "")
         secunde = 3600 * int(mute_minutes)
       minute=secunde/60
-      handshake = await timeout_user(user_id=member.id, guild_id=ctx.guild.id, until=minute)
-      if handshake:
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
-        if (secunde <= 60):
+      await member.edit(timed_out_until=discord.utils.utcnow()+timedelta(seconds=secunde))
+      embed = discord.Embed(title="", description="", color=default_color)
+      if (secunde <= 60):
           if reason!="":
             embed.add_field(name="Shhh",value=f'Domnul {member} a fost redus la tacere pentru {secunde:.0f} secunde. \nMotiv: {reason} ',inline=True)
           else:
             embed.add_field(name="Shhh",value=f'Domnul {member} a fost redus la tacere pentru {secunde:.0f} secunde.',inline=True)
-        elif (secunde <= 3600):
+      elif (secunde <= 3600):
           if reason!="":
             embed.add_field(name="Shhh",value=f'Domnul {member} a fost redus la tacere pentru {(secunde / 60):.0f} minute. \nMotiv: {reason} ',inline=True)
           else:
             embed.add_field(name="Shhh",value=f'Domnul {member} a fost redus la tacere pentru {(secunde / 60):.0f} minute.',inline=True)
-        else:
+      else:
           if reason!="":
             embed.add_field(name="Shhh",value=f'Domnul {member} a fost redus la tacere pentru {(secunde / 3600):.0f} ore. \nMotiv: {reason} ',inline=True)
           else:
             embed.add_field(name="Shhh",value=f'Domnul {member} a fost redus la tacere pentru {(secunde / 3600):.0f} ore . ',inline=True)
-        embed.set_image(url=
-            "https://cdn.discordapp.com/attachments/745384647885848594/855856582700695572/200_d.gif") 
-        await ctx.send(embed=embed)
-        with open("pad/data/data.json", "r") as jsonFile:
+      embed.set_image(url= "https://cdn.discordapp.com/attachments/745384647885848594/855856582700695572/200_d.gif") 
+      await ctx.send(embed=embed)
+      with open("pad/data/data.json", "r") as jsonFile:
           data = json.load(jsonFile)
           jsonFile.close()
-        if f"logs{ctx.guild.id}" in data:
+      if f"logs{ctx.guild.id}" in data:
           idlogs = int(data[f"logs{ctx.guild.id}"])
           channel = self.client.get_channel(int(idlogs))
           embedd = discord.Embed(title=f"{ctx.author} i-a dat mute lui {member}", description="",color=discord.Color.red())
@@ -676,12 +647,11 @@ Exemplu:
             await channel.send(embed=embedd)
           except:
             pass
-        return
-      ctx.wtff
+      return
     @mute.error
     async def mute_error(self,ctx, error):
      print(error)
-     embed = discord.Embed(title="", description="", color=discord.Color.green())
+     embed = discord.Embed(title="", description="", color=default_color)
      embed.add_field(name="Unde te crezi mă???",value=f'Mânuța că nu e voie!!!!',inline=True)
      await ctx.send(embed=embed)
 
@@ -690,7 +660,7 @@ Exemplu:
     @commands.has_permissions(manage_messages=True)
     async def unmute(self,ctx: commands.Context, member: discord.Member = None, *, reason=""):
       if member == None:
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
         embed.add_field(name="Comanda .unmute",value="""Comanda: .unmute
 Descriere: Îi redai cuiva accessul de  a putea conversa cu ceilalți membri
 Folosire: .unmute [membru] 
@@ -700,21 +670,20 @@ Exemplu:
    .unmute @lil dani nbn de la kuweit nmw mute greșit""")
         await ctx.reply(embed=embed)
         return
-      handshake = await timeout_user(user_id=member.id, guild_id=ctx.guild.id, until=0)
-      if handshake:
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
-        if reason!="":
+      await member.edit(timed_out_until=discord.utils.utcnow())
+      embed = discord.Embed(title="", description="", color=default_color)
+      if reason!="":
           embed.add_field(name="Ok poti vorbi",value=f'Domnul {member} a fost eliberat. Motiv : {reason} ',inline=True)
-        else:
+      else:
           embed.add_field(name="Ok poti vorbi",value=f'Domnul {member} a fost eliberat.',inline=True)
 
-        embed.set_image(url=
+      embed.set_image(url=
             "https://cdn.discordapp.com/attachments/735155822736179201/808694837628895282/20210209_154425.jpg") 
-        await ctx.send(embed=embed)
-        with open("pad/data/data.json", "r") as jsonFile:
+      await ctx.send(embed=embed)
+      with open("pad/data/data.json", "r") as jsonFile:
           data = json.load(jsonFile)
           jsonFile.close()
-        if f"logs{ctx.guild.id}" in data:
+      if f"logs{ctx.guild.id}" in data:
           idlogs = int(data[f"logs{ctx.guild.id}"])
           channel = self.client.get_channel(int(idlogs))
           embedd = discord.Embed(title=f"{ctx.author} i-a dat unmute lui {member}", description="",color=discord.Color.red())
@@ -724,15 +693,14 @@ Exemplu:
             await channel.send(embed=embedd)
           except:
             pass
-        return
-      ctx.wtff
+      return
     @unmute.error
     async def unmute_error(self,ctx, error):
      print(error)
-     embed = discord.Embed(title="", description="", color=discord.Color.green())
+     embed = discord.Embed(title="", description="", color=default_color)
      embed.add_field(name="Unde te crezi mă???",value=f'Mânuța că nu e voie!!!!',inline=True)
      await ctx.send(embed=embed)
 
 
-def setup(client):
-    client.add_cog(KickBan(client))
+async def setup(client):
+    await client.add_cog(KickBan(client))

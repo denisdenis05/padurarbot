@@ -7,7 +7,7 @@ from discord.ext import commands
 from discord.utils import get
 from discord.ext import tasks
 from datetime import datetime
-
+from main import default_color
 
 class Staff(commands.Cog):
     def __init__(self, client):
@@ -36,7 +36,7 @@ class Staff(commands.Cog):
         await membru.remove_roles(admin)
         await membru.remove_roles(trial)
         embed = discord.Embed(title=f"Saracul", description=f"{membru.mention} are remove.",
-                              color=discord.Color.green())
+                              color=default_color)
         await ctx.reply(embed=embed)
         if motiv == None:
             with open(f'pad/fisiere/stafflogs.txt', 'a+') as f:
@@ -75,7 +75,7 @@ class Staff(commands.Cog):
         with open("pad/data/data.json", "r") as jsonFile:
             data = json.load(jsonFile)
             jsonFile.close()
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
         if f"{ctx.guild.id}XP{membru.id}" not in data:
             xp = 0
         else:
@@ -118,7 +118,7 @@ La finalul fiecărei săptămâni, la ședința discutam situația fiecărui mem
 
 DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA MAI MULTE. (verificăm)
 
-""", color=discord.Color.green())
+""", color=default_color)
         await membru.send(embed=embed)
 
     @commands.command()
@@ -151,7 +151,7 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
         else:
             bans = int(data[f"{ctx.guild.id}bans{member.id}"])
         embed = discord.Embed(title=f"Activitatea lui {member.display_name}",
-                              description=f"*pe serverul {ctx.guild.name}", color=discord.Color.green())
+                              description=f"*pe serverul {ctx.guild.name}", color=default_color)
         embed.add_field(name="Mute-uri date:", value=mutes, inline=True)
         embed.add_field(name="Unmute-uri date:", value=unmutes, inline=True)
         embed.add_field(name="Kick-uri date:", value=kicks, inline=True)
@@ -197,7 +197,7 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
             if motiv is not None:
                 f.write(f"{motiv}" + "\n")
                 embed = discord.Embed(title=f"F in chat", description=f"{membru.mention} are warn pe motivul {motiv}",
-                                      color=discord.Color.green())
+                                      color=default_color)
                 await ctx.reply(embed=embed)
                 with open(f'pad/fisiere/stafflogs.txt', 'a+') as f:
                     f.write(
@@ -208,7 +208,7 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
             else:
                 f.write(f"Warn fara motiv" + "\n")
                 embed = discord.Embed(title=f"F in chat", description=f"{membru.mention} are warn",
-                                      color=discord.Color.green())
+                                      color=default_color)
                 await ctx.reply(embed=embed)
                 with open(f'pad/fisiere/stafflogs.txt', 'a+') as f:
                     f.write(
@@ -296,7 +296,7 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
                 if nrr == 1 or nrr == 2 or nrr == 3:
                     f.write(f"2 averismente" + "\n")
                 embed = discord.Embed(title=f"F in chat", description=f"{membru.mention} are warn pe motivul {motiv}",
-                                      color=discord.Color.green())
+                                      color=default_color)
                 await ctx.reply(embed=embed)
                 with open(f'pad/fisiere/stafflogs.txt', 'a+') as f:
                     f.write(
@@ -309,7 +309,7 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
                 if nrr == 1 or nrr == 2 or nrr == 3:
                     f.write(f"2 averismente" + "\n")
                 embed = discord.Embed(title=f"F in chat", description=f"{membru.mention} are un avertisment",
-                                      color=discord.Color.green())
+                                      color=default_color)
                 await ctx.reply(embed=embed)
                 with open(f'pad/fisiere/stafflogs.txt', 'a+') as f:
                     f.write(
@@ -358,6 +358,22 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
 {membru.name} - remove | 3 warn-uri
 ```""")
 
+    @commands.command(aliases=['startcereri', 'deschidecereri', 'cereristaf', 'stopcereri', 'cereristaff'])
+    @commands.has_permissions(administrator=True)
+    async def cereri(self, ctx):
+        with open("pad/data/data.json", "r") as jsonFile:
+            data = json.load(jsonFile)
+            jsonFile.close()
+        if "cererideschise" not in data or data["cererideschise"] == 0:
+            data["cererideschise"] = 1;
+            await ctx.reply("am deschis cererile, comanda /cerere poate fi folosita")
+        else:
+            data["cererideschise"] = 0
+            await ctx.reply("am inchis cererile, comanda /cerere NU MAI POATE fi folosita")
+        with open("pad/data/data.json", "w") as jsonFile:
+            json.dump(data, jsonFile)
+            jsonFile.close()
+
     @commands.command(aliases=['warndelete', 'delwarn', 'delwarns'])
     @commands.has_permissions(administrator=True)
     async def warndel(self, ctx, membru: discord.Member):
@@ -383,7 +399,7 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
         with open(f'pad/fisiere/warns/<@{membru.id}>.txt', 'a+') as f:
             if f"<@{membru.id}>" not in data or float(data[f"<@{membru.id}>"]) == 0:
                 embed = discord.Embed(title=f"Nah", description=f"{membru.mention} n-are warn-uri",
-                                      color=discord.Color.green())
+                                      color=default_color)
                 await ctx.reply(embed=embed)
             else:
                 f.truncate(0)
@@ -392,7 +408,7 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
                     json.dump(data, jsonFile)
                     jsonFile.close()
                 embed = discord.Embed(title=f"Ok bos", description=f"{membru.mention} e curat",
-                                      color=discord.Color.green())
+                                      color=default_color)
                 await ctx.reply(embed=embed)
                 os.remove(f"pad/fisiere/warns/<@{membru.id}>.txt")
 
@@ -407,12 +423,12 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
         with open(f'pad/fisiere/warns/<@{membru.id}>.txt', 'r') as f:
             if f"<@{membru.id}>" not in data or float(data[f"<@{membru.id}>"]) == 0:
                 embed = discord.Embed(title=f"Nah", description=f"{membru.mention} n-are warn-uri",
-                                      color=discord.Color.green())
+                                      color=default_color)
                 await ctx.reply(embed=embed)
             else:
                 warns = float(data[f"<@{membru.id}>"])
                 embed = discord.Embed(title=f"{membru} are {warns} warn-uri", description="",
-                                      color=discord.Color.green())
+                                      color=default_color)
                 embed.add_field(name="Warn-uri:", value=f.read())
                 await ctx.reply(embed=embed)
 
@@ -428,13 +444,13 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
             jsonFile.close()
         match_keys = {key: val for key, val in data.items()
                       if key.startswith("<@")}
-        embed = discord.Embed(title="Warn-urile din acest server", description="", color=discord.Color.green())
+        embed = discord.Embed(title="Warn-urile din acest server", description="", color=default_color)
         lenght = 0
         for k in match_keys:
             if float(data[k]) != 0:
                 lenght = int(lenght) + 1
         if int(lenght) == 0:
-            embed = discord.Embed(title="Gg tuturor", description="Nu-s warnuri", color=discord.Color.green())
+            embed = discord.Embed(title="Gg tuturor", description="Nu-s warnuri", color=default_color)
             await ctx.reply(embed=embed)
             return
         for k in match_keys:
@@ -443,5 +459,5 @@ DUPA CE CITITI ASTA, RULAȚI COMANDA `.regulament` si `.evidenta` PENTRU A AFLA 
         await ctx.reply(embed=embed)
 
 
-def setup(client):
-    client.add_cog(Staff(client))
+async def setup(client):
+    await client.add_cog(Staff(client))

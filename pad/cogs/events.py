@@ -7,13 +7,12 @@ import dbl
 import os
 import asyncio
 from main import invites, topxplist, paginaxp, numeafk, motivafk, incaafk
+from discord.ui import Button, View
 from discord.ext import commands
 from discord.ext import tasks
 from discord.utils import get
 from datetime import datetime
-import discord_components
-from discord_components import DiscordComponents, Button, ButtonStyle, ActionRow
-
+from main import default_color,secondary_color
 
 class Events(commands.Cog):
 
@@ -40,11 +39,34 @@ class Events(commands.Cog):
             invites[guild.id] = await guild.invites()
 
     @commands.Cog.listener()
-    async def on_button_click(self, interaction):
-        print(interaction.author)
-        if interaction.responded:
-            return
-        if "top" in interaction.custom_id:
+    async def on_interaction(self,interaction):
+        buttondata = interaction.data
+        type = buttondata['component_type']
+        custom_id = buttondata['custom_id']
+      
+        print(custom_id)
+        if custom_id == "admin":
+                embed = discord.Embed(title="Comenzi admin",
+                                      description="`addrole`, `removerole`, `adminspune`, `announcement`, `ban`, `kick`, `mute`, `purge`, `searchpurge`,  `setnick`, `softban`, `unban`",
+                                      color=default_color)
+                await interaction.response.send_message(embed=embed)
+        elif custom_id == "setup":
+                embed = discord.Embed(title="Comenzi setup",
+                                      description="`setup`, `prefix`, `setjoinleave`, `setlogs`, `setmembercount`, `setmute`, `setvoice`",
+                                      color=default_color)
+                await interaction.response.send_message(embed=embed)
+        elif custom_id == "utilitati":
+                embed = discord.Embed(title="Comenzi utile",
+                                      description="`alege`, `avatar`, `editsnipe`, `purge`, `random`, `invite`, `serveravatar`, `slowmode`, `snipe`, `xp`, `top`, `servere`, `membercount`,`whois`,`afk`",
+                                      color=default_color)
+                await interaction.response.send_message(embed=embed)
+        elif custom_id == "amuzament":
+                embed = discord.Embed(title="Comenzi amuzament",
+                                      description="`birthday`, `cuddle`, `divort`, `facebook`, `fraier`, `gay`, `howgay`, `casatorie`, `urbandictionary`, `party`, `pp`, `pup`, `ship`, `simp`, `sot`, `spune`, `tembel`, `wanted`, `imbratisare`, `palmă`, `limbă`, `supremacy`,`clan`,`kanye`,`messi`,`zamn`,`furry`",
+                                      color=default_color)
+                await interaction.response.send_message(embed=embed)
+
+        if "top" in custom_id:
             if interaction.message.content == "Un moment, schimb paginile...":
                 await interaction.send(
                     content="Stai un moment, procesez alta cerere de schimbare a paginii. De obicei se intampla asta cand mai multe persoane apasa pe butoane in acelasi timp. Incearca din nou in cateva secunde")
@@ -54,47 +76,49 @@ class Events(commands.Cog):
 
             sort = topxplist[interaction.guild.id]
             nr = paginaxp[interaction.guild.id]
-            if interaction.custom_id == "primultop":
+
+            view = View()    
+            if custom_id == "primultop":
                 nr = 1
-                row = ActionRow(Button(label="⏮", style=3, custom_id="primultop", disabled=True),
-                                Button(label="⏪", style=3, custom_id="backtop", disabled=True),
-                                Button(label="⏩", style=3, custom_id="nexttop"),
-                                Button(label="⏭", style=3, custom_id="ultimultop"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="primultop",emoji="⏮", disabled=True))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="backtop",emoji="⏪", disabled=True))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="nexttop",emoji="⏩"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="ultimultop",emoji="⏭"))
             elif interaction.custom_id == "backtop":
                 nr = nr - 1
-                row = ActionRow(Button(label="⏮", style=3, custom_id="primultop"),
-                                Button(label="⏪", style=3, custom_id="backtop"),
-                                Button(label="⏩", style=3, custom_id="nexttop"),
-                                Button(label="⏭", style=3, custom_id="ultimultop"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="primultop",emoji="⏮"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="backtop",emoji="⏪"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="nexttop",emoji="⏩"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="ultimultop",emoji="⏭"))
                 if nr == 1:
-                    row = ActionRow(Button(label="⏮", style=3, custom_id="primultop", disabled=True),
-                                    Button(label="⏪", style=3, custom_id="backtop", disabled=True),
-                                    Button(label="⏩", style=3, custom_id="nexttop"),
-                                    Button(label="⏭", style=3, custom_id="ultimultop"))
-            elif interaction.custom_id == "nexttop":
+                  view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="primultop",emoji="⏮", disabled=True))
+                  view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="backtop",emoji="⏪", disabled=True))
+                  view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="nexttop",emoji="⏩"))
+                  view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="ultimultop",emoji="⏭"))
+            elif custom_id == "nexttop":
                 nr = nr + 1
-                row = ActionRow(Button(label="⏮", style=3, custom_id="primultop"),
-                                Button(label="⏪", style=3, custom_id="backtop"),
-                                Button(label="⏩", style=3, custom_id="nexttop"),
-                                Button(label="⏭", style=3, custom_id="ultimultop"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="primultop",emoji="⏮"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="backtop",emoji="⏪"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="nexttop",emoji="⏩"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="ultimultop",emoji="⏭"))
                 if nr == int((len(sort) - 1) / 10):
-                    row = ActionRow(Button(label="⏮", style=3, custom_id="primultop"),
-                                    Button(label="⏪", style=3, custom_id="backtop"),
-                                    Button(label="⏩", style=3, custom_id="nexttop", disabled=True),
-                                    Button(label="⏭", style=3, custom_id="ultimultop", disabled=True))
-            elif interaction.custom_id == "ultimultop":
+                  view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="primultop",emoji="⏮"))
+                  view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="backtop",emoji="⏪"))
+                  view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="nexttop",emoji="⏩", disabled=True))
+                  view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="ultimultop",emoji="⏭", disabled=True))
+            elif custom_id == "ultimultop":
                 nr = int((len(sort) - 1) / 10)
-                row = ActionRow(Button(label="⏮", style=3, custom_id="primultop"),
-                                Button(label="⏪", style=3, custom_id="backtop"),
-                                Button(label="⏩", style=3, custom_id="nexttop", disabled=True),
-                                Button(label="⏭", style=3, custom_id="ultimultop", disabled=True))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="primultop",emoji="⏮"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="backtop",emoji="⏪"))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="nexttop",emoji="⏩", disabled=True))
+                view.add_item(discord.ui.Button(style=discord.ButtonStyle.primary,custom_id="ultimultop",emoji="⏭", disabled=True))
             i = (nr - 1) * 10
             j = nr * 10
             paginaxp[interaction.guild.id] = nr
             if len(sort) < j:
                 j = len(sort)
-            embed = discord.Embed(title="", description="", color=discord.Color.green())
-            embed.set_author(name="Top puncte in padure",
+            embed = discord.Embed(title="", description="", color=default_color)
+            embed.set_author(name="Top puncte",
                              icon_url="https://cdn.discordapp.com/attachments/745384647885848594/864852166433570856/89a9a37af2f4387bc8293ae4dacfb4c4.jpg")
             while i < j:
                 sortat = (str(sort[i]).replace("',", "b")).replace(")", "n")
@@ -115,7 +139,7 @@ class Events(commands.Cog):
                 icon_url="https://freepikpsd.com/media/2019/11/emoji-meme-png-4-Transparent-Images.png")
             embed.set_thumbnail(
                 url="https://cdn.discordapp.com/attachments/745384647885848594/864473500257353788/830009449011871754.gif")
-            await interaction.message.edit("", embed=embed, components=[row])
+            await interaction.message.edit("", embed=embed, view=view)
         elif interaction.custom_id == "inchideticket":
             if str(interaction.author.id) in str(interaction.message.content):
                 await interaction.message.channel.delete()
@@ -127,7 +151,7 @@ class Events(commands.Cog):
     async def on_message(self, message):
         # await self.client.process_commands(message)
         try:
-            baneasa = self.client.get_guild(619454105869352961)
+            baneasa = self.client.get_guild(619454105869352961) #TREBUIE SCHIMBAT IN FUNCTIE DE SERVER
             denis = await baneasa.fetch_member(852673995563597875)
         except:
             pass
@@ -153,11 +177,11 @@ class Events(commands.Cog):
                 if motiv != 0 and nume != 0 and incaafk[f"{message.guild.id}{idmemb}"] != 0:
                     if motiv == "None":
                         embed = discord.Embed(title=f"{membru.name} e afk", description=f"Nu deranja >:(",
-                                              color=discord.Color.green())
+                                              color=default_color)
                     else:
                         embed = discord.Embed(title=f"{membru.name} e afk",
                                               description=f"Motivul: **{motiv}**\nNu deranja >:(",
-                                              color=discord.Color.green())
+                                              color=default_color)
                     embed.set_image(url="https://i1.sndcdn.com/artworks-000414005793-hafsu6-t500x500.jpg")
                     await message.reply(embed=embed)
 
@@ -169,8 +193,8 @@ class Events(commands.Cog):
                 user = await self.client.fetch_user(id)
                 embed = discord.Embed(title="Wohoo cineva a votat botul",
                                       description=f"Multumim {user.mention} pentru vot.\n\n[Click pentru a vota si tu Pădurarul](https://top.gg/bot/885503634710884412)",
-                                      color=discord.Color.teal())
-                embed.set_footer(text="Poti vota Pădurarul odată la 12 ore", icon_url=user.avatar_url)
+                                      color=secondary_color)
+                embed.set_footer(text="Poti vota Pădurarul odată la 12 ore", icon_url=user.avatar.url)
                 with open("pad/data/data.json", "r") as jsonFile:
                     data = json.load(jsonFile)
                     jsonFile.close()
@@ -207,7 +231,7 @@ class Events(commands.Cog):
                     except:
                         pass
             channellfree = self.client.get_channel(939939384898244689)
-            embed = discord.Embed(title=titlu, description=pret, color=discord.Color.green())
+            embed = discord.Embed(title=titlu, description=pret, color=default_color)
             embed.set_image(url=image)
             try:
                 embed.add_field(name=f'Deschide oferta', value=openinbrowser)
@@ -287,7 +311,7 @@ class Events(commands.Cog):
         if message.author.id == 790607817128017920 or message.author.id == 323834360979783680:
             return
         print("ok")
-        if str(message.content).startswith("<@790607817128017920>"):
+        if str(message.content).startswith("<@885503634710884412>") or str(message.content).startswith("<@!885503634710884412>"):
             with open("pad/data/data.json", "r") as jsonFile:
                 data = json.load(jsonFile)
                 jsonFile.close()
@@ -296,7 +320,7 @@ class Events(commands.Cog):
                 prefix = data[f"prefix{message.guild.id}"]
             embed = discord.Embed(title="Cineva mi-a dat ping",
                                   description=f"Prefixul meu e `{prefix}`, foloseste comanda `.help` pe canalul de comenzi pentru mai multe",
-                                  color=discord.Color.teal())
+                                  color=secondary_color)
             await message.channel.send(embed=embed)
         guild = message.guild
         await asyncio.sleep(2)
@@ -377,7 +401,7 @@ class Events(commands.Cog):
         user = dataa['user']
         embed = discord.Embed(title="Cineva ne-a votat botul!",
                               description=f"Nabun! Votator: {user}\n[Voteaza-ne si tu!](https://top.gg/bot/790607817128017920)",
-                              color=discord.Color.green())
+                              color=default_color)
         channel = self.client.get_channel(735155822736179201)
         await channel.send(embed=embed)
 
@@ -389,7 +413,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         guild = member.guild
-        membru = guild.get_role(619458516356431882)
+        membru = guild.get_role(619458516356431882) #TREBUIE SCHIMBAT
         staff = guild.get_role(619458376383856642)
         # logs
         with open("pad/data/data.json", "r") as jsonFile:
@@ -399,7 +423,7 @@ class Events(commands.Cog):
             idlogs = data[f"logs{guild.id}"]
             channell = self.client.get_channel(int(idlogs))
         if before.channel is None and after.channel is not None:
-            embed = discord.Embed(title="", description="", color=discord.Color.green())
+            embed = discord.Embed(title="", description="", color=default_color)
             embed.add_field(name=f'A intrat pe vocal 📢', value=f"{member.mention} a intrat pe **{after.channel}**")
             try:
                 await channell.send(embed=embed)
@@ -413,7 +437,7 @@ class Events(commands.Cog):
             except:
                 pass
         elif before.channel is not after.channel:
-            embed = discord.Embed(title="", description="", color=discord.Color.teal())
+            embed = discord.Embed(title="", description="", color=secondary_color)
             embed.add_field(name=f'S-a mutat intre vocale 📢',
                             value=f"{member.mention} a ieșit de pe **{before.channel}** si a intrat pe **{after.channel}**")
             try:
@@ -534,7 +558,7 @@ a zis cevs cu N WORD NU SE ZICE""", color=discord.Color.red())
             if ok == 0:
                 embed.set_image(url=message.attachments[0].proxy_url)
                 embed.set_author(name=f'{message.author.name}#{message.author.discriminator}',
-                                 icon_url=message.author.avatar_url)
+                                 icon_url=message.author.avatar.url)
                 embed.set_footer(text=f"ID: {message.author.id}")
                 await channel.send(embed=embed)
                 return
@@ -543,7 +567,7 @@ a zis cevs cu N WORD NU SE ZICE""", color=discord.Color.red())
 
         # embed.add_field(name=f"Mesajul:",value=snipe_message_content)
         embed.set_author(name=f'{message.author.name}#{message.author.discriminator}',
-                         icon_url=message.author.avatar_url)
+                         icon_url=message.author.avatar.url)
         embed.set_footer(text=f"ID: {message.author.id}")
         await channel.send(embed=embed)
         await asyncio.sleep(60)
@@ -553,15 +577,15 @@ a zis cevs cu N WORD NU SE ZICE""", color=discord.Color.red())
     @commands.command()
     async def snipe(self, message):
         if f'd{message.guild.id}' not in snipe_message_author or snipe_message_author[f'd{message.guild.id}'] == 0:
-            embed = discord.Embed(title="", description="", color=discord.Color.green())
+            embed = discord.Embed(title="", description="", color=default_color)
             embed.add_field(name=f'???', value="Nu-i niciun mesaj sters")
             await message.send(embed=embed)
             return
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
         mesaj = snipe_message_content[f'd{message.guild.id}']
         autor = snipe_message_author[f'd{message.guild.id}']
         embed.add_field(name=f'Mesaj sters de {autor}', value=mesaj)
-        embed.set_footer(text=f"Cerut de {message.author}", icon_url=message.author.avatar_url)
+        embed.set_footer(text=f"Cerut de {message.author}", icon_url=message.author.avatar.url)
         embed.timestamp = datetime.utcnow()
         await message.send(embed=embed)
 
@@ -580,7 +604,7 @@ a zis cevs cu N WORD NU SE ZICE""", color=discord.Color.red())
         )
         if before.author.bot == True:
             return
-        embed.set_author(name=f'{before.author.name}#{before.author.discriminator}', icon_url=before.author.avatar_url)
+        embed.set_author(name=f'{before.author.name}#{before.author.discriminator}', icon_url=before.author.avatar.url)
         embed.set_footer(text=f"ID: {before.author.id}")
         embed.add_field(name='Inainte:', value=before.content, inline=False)
         embed.add_field(name="Dupa:", value=after.content, inline=False)
@@ -603,19 +627,19 @@ a zis cevs cu N WORD NU SE ZICE""", color=discord.Color.red())
     @commands.command()
     async def editsnipe(self, message):
         if f'd{message.guild.id}' not in editsnipe_author or editsnipe_author[f'd{message.guild.id}'] == 0:
-            embed = discord.Embed(title="", description="", color=discord.Color.green())
+            embed = discord.Embed(title="", description="", color=default_color)
             embed.add_field(name=f'Stai calm cumetre', value="Nu-i niciun mesaj editat")
             await message.send(embed=embed)
             return
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
         mesajinainte = editsnipe_before[f'd{message.guild.id}']
         mesajdupa = editsnipe_after[f'd{message.guild.id}']
         autor = editsnipe_author[f'd{message.guild.id}']
 
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
         embed.add_field(name=f'Mesaj editat de {autor}', value=f"**Inainte:** {mesajinainte}\n**Dupa:** {mesajdupa}",
                         inline=False)
-        embed.set_footer(text=f"Cerut de {message.author}", icon_url=message.author.avatar_url)
+        embed.set_footer(text=f"Cerut de {message.author}", icon_url=message.author.avatar.url)
         embed.timestamp = datetime.utcnow()
         await message.send(embed=embed)
 
@@ -649,7 +673,7 @@ a zis cevs cu N WORD NU SE ZICE""", color=discord.Color.red())
             for invite in invites_before_join:
                 try:
                     if invite.uses < find_invite_by_code(invites_after_join, invite.code).uses:
-                        embedinv = discord.Embed(title="", description="", color=discord.Color.green())
+                        embedinv = discord.Embed(title="", description="", color=default_color)
                         if f"{member.guild.id}inv{member.id}" in invitedata and invitedata[
                             f"{member.guild.id}inv{member.id}"] != invite.inviter.id:
                             if f"{member.guild.id}fakeinvites{invite.inviter.id}" not in invitedata:
@@ -691,10 +715,10 @@ a zis cevs cu N WORD NU SE ZICE""", color=discord.Color.red())
             json.dump(invitedata, jsonFile)
             jsonFile.close()
 
-        embed = discord.Embed(title="", description="", color=discord.Color.green())
+        embed = discord.Embed(title="", description="", color=default_color)
         embed.add_field(name="**(•‿•)**", value=f"[+] {member} ")
         await channell.send(embed=embed)
-        embed2 = discord.Embed(title="Membru intrat", description="", color=discord.Color.green())
+        embed2 = discord.Embed(title="Membru intrat", description="", color=default_color)
         embed2.add_field(name="Nume:", value=f"{member}")
         embed2.add_field(name="Data in care a fost creeat contul:",
                          value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"))
@@ -798,7 +822,7 @@ a zis cevs cu N WORD NU SE ZICE""", color=discord.Color.red())
         channel = self.client.get_channel(idlogs)
         if len(before.roles) < len(after.roles):
             channell = self.client.get_channel(id=619461125494538240)
-            embed = discord.Embed(title="Rol adaugat", description="", color=discord.Color.green())
+            embed = discord.Embed(title="Rol adaugat", description="", color=default_color)
             embed.add_field(name="Nume", value=after)
             role = next(role for role in after.roles if role not in before.roles)
             embed.add_field(name="Rol adaugat", value=role)
@@ -813,14 +837,14 @@ a zis cevs cu N WORD NU SE ZICE""", color=discord.Color.red())
                     url="https://cdn.discordapp.com/attachments/745384647885848594/826533083335229527/20210330_220714.gif")
                 await channell.send(embed=embeddd)
         elif len(before.roles) > len(after.roles):
-            embed = discord.Embed(title="Rol sters", description="", color=discord.Color.green())
+            embed = discord.Embed(title="Rol sters", description="", color=default_color)
             embed.add_field(name="Nume", value=after)
             role = next(role for role in before.roles if role not in after.roles)
             embed.add_field(name="Rol sters", value=role)
             embed.set_footer(text=f"Id: {after.id}")
             await channel.send(embed=embed)
         elif before.nick != after.nick:
-            embed = discord.Embed(title="Nickname schimbat", description="", color=discord.Color.green())
+            embed = discord.Embed(title="Nickname schimbat", description="", color=default_color)
             embed.add_field(name="Nume", value=after)
             embed.add_field(name="Nickname vechi", value=before.nick)
             embed.add_field(name="Nickname nou", value=after.nick)
@@ -1069,5 +1093,5 @@ a zis cevs cu N WORD NU SE ZICE""", color=discord.Color.red())
                         return
 
 
-def setup(client):
-    client.add_cog(Events(client))
+async def setup(client):
+    await client.add_cog(Events(client))

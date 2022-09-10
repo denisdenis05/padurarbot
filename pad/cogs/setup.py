@@ -3,7 +3,7 @@ import random
 import json
 import re
 from discord.ext import commands
-
+from main import default_color
 
 class Setup(commands.Cog):
 
@@ -96,7 +96,8 @@ class Setup(commands.Cog):
                 return
 
     @commands.command(
-        aliases=['set_reaction_rol', 'set_reaction_role', 'setreactie', 'setemoji', 'autorole', 'selfrole','setreaction'])
+        aliases=['set_reaction_rol', 'set_reaction_role', 'setreactie', 'setemoji', 'autorole', 'selfrole',
+                 'setreaction'])
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def setreactionrole(self, ctx):
@@ -118,8 +119,8 @@ class Setup(commands.Cog):
 
         def check1(reaction, user):
             return reaction.message.id == mesaj.id and user.id == ctx.author.id and (
-                        str(reaction.emoji) == nu or str(reaction.emoji) == a or str(reaction.emoji) == m or str(
-                    reaction.emoji) == da or str(reaction.emoji) == e)
+                    str(reaction.emoji) == nu or str(reaction.emoji) == a or str(reaction.emoji) == m or str(
+                reaction.emoji) == da or str(reaction.emoji) == e)
 
         def check2(m):
             return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
@@ -321,14 +322,14 @@ class Setup(commands.Cog):
             try:
                 msg = await self.client.wait_for('message', check=check2, timeout=240)
                 mesajid = int(msg.content)
-                mesajj=None
+                mesajj = None
                 mesajjee = await channell.history(limit=200).flatten()
                 for mesajt in mesajjee:
-                  if mesajt.id==mesajid:
-                    mesajj = mesajt
-                if mesajj==None:
-                  await ctx.send("n-am putut gasi mesajul, posibil sa fie prea vechi.")
-                  raise Exception("lmao")
+                    if mesajt.id == mesajid:
+                        mesajj = mesajt
+                if mesajj == None:
+                    await ctx.send("n-am putut gasi mesajul, posibil sa fie prea vechi.")
+                    raise Exception("lmao")
             except:
                 await mesaj.delete()
                 return
@@ -448,8 +449,8 @@ class Setup(commands.Cog):
 
         def check1(reaction, user):
             return reaction.message.id == mesaj.id and user.id == ctx.author.id and (
-                        str(reaction.emoji) == nu or str(reaction.emoji) == da or str(reaction.emoji) == arata or str(
-                    reaction.emoji) == sterge)
+                    str(reaction.emoji) == nu or str(reaction.emoji) == da or str(reaction.emoji) == arata or str(
+                reaction.emoji) == sterge)
 
         def check2(m):
             return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
@@ -655,14 +656,14 @@ class Setup(commands.Cog):
         elif numar == 1:
             data["eventxp"] = 1
             embed = discord.Embed(title="Gata eventul.", description="De acum primiti xp normal. ",
-                                  color=discord.Color.green())
+                                  color=default_color)
         elif numar == 2:
             data["eventxp"] = 2
-            embed = discord.Embed(title="Bunn", description="De acum se primeste xp dublu", color=discord.Color.green())
+            embed = discord.Embed(title="Bunn", description="De acum se primeste xp dublu", color=default_color)
         elif numar == 3:
             data["eventxp"] = 3
             embed = discord.Embed(title="Bunn", description="De acum se primeste xp triplu",
-                                  color=discord.Color.green())
+                                  color=default_color)
         with open("pad/data/data.json", "w") as jsonFile:
             json.dump(data, jsonFile)
             jsonFile.close()
@@ -789,7 +790,7 @@ class Setup(commands.Cog):
                             raise Exception("nu")
                         await mesaj.delete()
                         embed = discord.Embed(title=f"Ce mesaj vrei sa trimit membrilor noi?",
-                                              description=f"Trimite doar mesajul. Exemplu: `Bun venit in Padure la Baneasa!`",
+                                              description=f"Trimite doar mesajul. Exemplu: `Bun venit in server!`",
                                               color=discord.Color.from_rgb(105, 105, 105))
                         mesaj = await ctx.send(embed=embed)
                         msg = await self.client.wait_for('message', check=check2, timeout=30)
@@ -894,7 +895,7 @@ class Setup(commands.Cog):
                             await mesaj.delete()
                             await msg.delete()
                             embed = discord.Embed(title=f"Ce mesaj vrei sa trimit membrilor noi?",
-                                                  description=f"Trimite doar mesajul. Exemplu: `Bun venit in Padure la Baneasa!`",
+                                                  description=f"Trimite doar mesajul. Exemplu: `Bun venit in server!`",
                                                   color=discord.Color.from_rgb(105, 105, 105))
                             mesaj = await ctx.send(embed=embed)
                             msg = await self.client.wait_for('message', check=check2, timeout=30)
@@ -940,16 +941,15 @@ class Setup(commands.Cog):
             await mesaj.delete()
             return
 
-
-
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def setbirthday(self, ctx):
         with open("pad/data/data.json", "r") as jsonFile:
             data = json.load(jsonFile)
             jsonFile.close()
-        embed = discord.Embed(title=f"Ce vrei sa setezi pentru comanda .birthday? (reactioneaza mai jos)",description=f"🇨: Canalul pe care sa trimit urari\n🇷: rolul pe care il voi da tuturor sarbatoritilor\n⛔: renunta",
-                                  color=discord.Color.from_rgb(105, 105, 105))
+        embed = discord.Embed(title=f"Ce vrei sa setezi pentru comanda .birthday? (reactioneaza mai jos)",
+                              description=f"🇨: Canalul pe care sa trimit urari\n🇷: rolul pe care il voi da tuturor sarbatoritilor\n⛔: renunta",
+                              color=discord.Color.from_rgb(105, 105, 105))
         mesaj = await ctx.reply(embed=embed)
         nu = '⛔'
         c = '🇨'
@@ -959,56 +959,62 @@ class Setup(commands.Cog):
         await mesaj.add_reaction(nu)
 
         def check1(reaction, user):
-                return reaction.message.id == mesaj.id and user.id == ctx.author.id and (
-                        str(reaction.emoji) == nu or str(reaction.emoji) == c or str(reaction.emoji) == r)
+            return reaction.message.id == mesaj.id and user.id == ctx.author.id and (
+                    str(reaction.emoji) == nu or str(reaction.emoji) == c or str(reaction.emoji) == r)
 
         def check2(m):
-                return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
+            return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
 
         try:
-          reaction, user = await self.client.wait_for('reaction_add', timeout=45, check=check1)
-          if str(reaction.emoji) == nu:
-            raise Exception("nu")
-          if str(reaction.emoji) == c:
-            embed = discord.Embed(title=f"Bun mestere", description=f"Te rog trimite un mesaj care contine **doar** canalul/id-ul canalului pe care voi trimite urari. *Poate fi un canal creat special sau unul simplu pe care se vorbeste in general.*",color=discord.Color.from_rgb(105, 105, 105))
-            mesaj = await ctx.send(embed=embed)
-            msg = await self.client.wait_for('message', check=check2, timeout=30)
-            pref = str(msg.content)
-            await mesaj.delete()
-            try:
-                canal = re.search('<#(.+?)>', pref).group(1)
-            except AttributeError:
-                canal = int(pref)
-            data[f"birthdaycanal{ctx.guild.id}"]=canal
-            with open("pad/data/data.json", "w") as jsonFile:
+            reaction, user = await self.client.wait_for('reaction_add', timeout=45, check=check1)
+            if str(reaction.emoji) == nu:
+                raise Exception("nu")
+            if str(reaction.emoji) == c:
+                embed = discord.Embed(title=f"Bun mestere",
+                                      description=f"Te rog trimite un mesaj care contine **doar** canalul/id-ul canalului pe care voi trimite urari. *Poate fi un canal creat special sau unul simplu pe care se vorbeste in general.*",
+                                      color=discord.Color.from_rgb(105, 105, 105))
+                mesaj = await ctx.send(embed=embed)
+                msg = await self.client.wait_for('message', check=check2, timeout=30)
+                pref = str(msg.content)
+                await mesaj.delete()
+                try:
+                    canal = re.search('<#(.+?)>', pref).group(1)
+                except AttributeError:
+                    canal = int(pref)
+                data[f"birthdaycanal{ctx.guild.id}"] = canal
+                with open("pad/data/data.json", "w") as jsonFile:
                     json.dump(data, jsonFile)
                     jsonFile.close()
-            embed = discord.Embed(title=f"Gata.", description=f"Voi trimite urari pe <#{canal}>. Daca vrei sa setezi si un rol pe care sa il dau sarbatoritilor, ruleaza comanda din nou!",color=discord.Color.from_rgb(105, 105, 105))
-            await ctx.send(embed=embed)
-            return
-          if str(reaction.emoji) == r:
-            embed = discord.Embed(title=f"Bun mestere", description=f"Te rog trimite un mesaj care contine **doar** rolul/id-ul rolului pe care il voi da sarbatoritilor.",color=discord.Color.from_rgb(105, 105, 105))
-            mesaj = await ctx.send(embed=embed)
-            msg = await self.client.wait_for('message', check=check2, timeout=30)
-            pref = str(msg.content)
-            await mesaj.delete()
-            try:
-                canal = re.search('<@&(.+?)>', pref).group(1)
-            except AttributeError:
-                canal = int(pref)
-            data[f"birthdayrol{ctx.guild.id}"]=canal
-            with open("pad/data/data.json", "w") as jsonFile:
+                embed = discord.Embed(title=f"Gata.",
+                                      description=f"Voi trimite urari pe <#{canal}>. Daca vrei sa setezi si un rol pe care sa il dau sarbatoritilor, ruleaza comanda din nou!",
+                                      color=discord.Color.from_rgb(105, 105, 105))
+                await ctx.send(embed=embed)
+                return
+            if str(reaction.emoji) == r:
+                embed = discord.Embed(title=f"Bun mestere",
+                                      description=f"Te rog trimite un mesaj care contine **doar** rolul/id-ul rolului pe care il voi da sarbatoritilor.",
+                                      color=discord.Color.from_rgb(105, 105, 105))
+                mesaj = await ctx.send(embed=embed)
+                msg = await self.client.wait_for('message', check=check2, timeout=30)
+                pref = str(msg.content)
+                await mesaj.delete()
+                try:
+                    canal = re.search('<@&(.+?)>', pref).group(1)
+                except AttributeError:
+                    canal = int(pref)
+                data[f"birthdayrol{ctx.guild.id}"] = canal
+                with open("pad/data/data.json", "w") as jsonFile:
                     json.dump(data, jsonFile)
                     jsonFile.close()
-            embed = discord.Embed(title=f"Gata.", description=f"Voi da sarbatoritilor rolul de <@&{canal}>. Daca vrei sa setezi si un canal pe care sa trimit urari, ruleaza comanda din nou!",color=discord.Color.from_rgb(105, 105, 105))
-            await ctx.send(embed=embed)
-            return
+                embed = discord.Embed(title=f"Gata.",
+                                      description=f"Voi da sarbatoritilor rolul de <@&{canal}>. Daca vrei sa setezi si un canal pe care sa trimit urari, ruleaza comanda din nou!",
+                                      color=discord.Color.from_rgb(105, 105, 105))
+                await ctx.send(embed=embed)
+                return
 
         except:
-          await mesaj.delete()
-          return
-
-
+            await mesaj.delete()
+            return
 
     @commands.command()
     @commands.has_permissions(administrator=True)
@@ -1106,7 +1112,6 @@ class Setup(commands.Cog):
             # db[k]=data[k]
             # print(k,db[k])
 
-
     @commands.command(aliases=['setvocal'])
     @commands.has_permissions(administrator=True)
     async def setvoice(self, ctx, *, channel=None):
@@ -1153,14 +1158,14 @@ class Setup(commands.Cog):
         else:
             nu = '⛔'
             da = '✅'
+
             def check1(reaction, user):
                 return reaction.message.id == mesaj.id and user.id == ctx.author.id and (
                         str(reaction.emoji) == nu or str(reaction.emoji) == da)
 
             def check2(m):
                 return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
-          
-            
+
             embed = discord.Embed(title=f"Bun mestere",
                                   description=f"Vrei sa se creeze automat un canal pentru voice sau stii sa faci singur? (+ sa iei id-ul canalului)\n\n✅-Fac automat (de preferat)\n⛔-Nu fac canal (daca alegi asta, va urma sa imi dai tu ping la canal sau id-ul canalului)",
                                   color=discord.Color.from_rgb(105, 105, 105))
@@ -1178,17 +1183,15 @@ class Setup(commands.Cog):
                     json.dump(data, jsonFile)
                     jsonFile.close()
                 embedd2 = discord.Embed(title=f"Gata mestere",
-                                  description=f"Am setat canalul <#{chanal.id}> pentru voice intermediar. Poti schimba numele canalului, pozitia sau orice alta setare fara a avea probleme.\n\n*recomandam sa testati canalul pentru a vedea daca va place optiunea*",
-                                  color=discord.Color.from_rgb(105, 105, 105))
+                                        description=f"Am setat canalul <#{chanal.id}> pentru voice intermediar. Poti schimba numele canalului, pozitia sau orice alta setare fara a avea probleme.\n\n*recomandam sa testati canalul pentru a vedea daca va place optiunea*",
+                                        color=discord.Color.from_rgb(105, 105, 105))
                 mesaj = await ctx.send(embed=embedd2)
                 return
-                
+
 
             except Exception as ex:
-              print(ex)
-              pass
-
-                    
+                print(ex)
+                pass
 
             embed = discord.Embed(title=f"Bun mestere",
                                   description=f"Te rog trimite un mesaj care contine **doar** canalul/id-ul canalului pe care vreti sa il folositi ca intermediar pentru voice. Exemplu: `#intra_voice`",
@@ -1226,7 +1229,6 @@ class Setup(commands.Cog):
             except:
                 await mesaj.delete()
                 return
-
 
     @commands.command(aliases=['setinvite'])
     @commands.has_permissions(administrator=True)
@@ -1447,9 +1449,9 @@ class Setup(commands.Cog):
                 with open("pad/data/data.json", "w") as jsonFile:
                     json.dump(data, jsonFile)
                     jsonFile.close()
-                #embedd2 = discord.Embed(title=f"Gata mestere",description=f"Am setat canalul <#{chanal.id}> pentru voice intermediar. Poti schimba numele canalului, pozitia sau orice alta setare fara a avea probleme.\n\n*recomandam sa testati canalul pentru a vedea daca va place optiunea*",color=discord.Color.from_rgb(105, 105, 105))
-                #mesaj = await ctx.send(embed=embedd2)
-                #return
+                # embedd2 = discord.Embed(title=f"Gata mestere",description=f"Am setat canalul <#{chanal.id}> pentru voice intermediar. Poti schimba numele canalului, pozitia sau orice alta setare fara a avea probleme.\n\n*recomandam sa testati canalul pentru a vedea daca va place optiunea*",color=discord.Color.from_rgb(105, 105, 105))
+                # mesaj = await ctx.send(embed=embedd2)
+                # return
                 embed = discord.Embed(title=f"Doresti sa folosesti un nume personalizat?",
                                       description=f"Numele prestabilit al canalului este |🌲| Membrii (exemplu: |🌲| Membrii: {ctx.guild.member_count}), insa il poti schimba dupa preferintele tale!",
                                       color=discord.Color.from_rgb(105, 105, 105))
@@ -1502,12 +1504,12 @@ class Setup(commands.Cog):
                         await ctx.send(embed=embed)
                         return
                 except:
-                  await mesaj.delete()
-                  return
+                    await mesaj.delete()
+                    return
 
             except Exception as ex:
-              print(ex)
-              pass
+                print(ex)
+                pass
             embed = discord.Embed(title=f"Ok, hai sa setam canalul!",
                                   description=f"Te rog trimite un mesaj care contine canalul/id-ul canalului pe care vrei sa il folosesti. Exemplu: #membercount\n\n*recomandam ca acest canal sa fie unul vocal, special facut pentru membercount*",
                                   color=discord.Color.from_rgb(105, 105, 105))
@@ -1606,65 +1608,88 @@ class Setup(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def setup(self, ctx, panel=None):
-      if panel==None:
-                embed = discord.Embed(title="Setup bot", description="Padurarul va ofera o serie de chestii de setat. Sunt total optionale, insa recomandate!",color=discord.Color.from_rgb(105, 105, 105))
-                embed.add_field(name="Rulati `.setup general`", value="pentru a vedea sectiunea generala de setari\n\n", inline=False)
-                embed.add_field(name="Rulati `.setup fun`", value="pentru a vedea sectiunea de setari a functiilor 'amuzante'\n\n", inline=False)
-      elif "GENERAL" in panel.upper():
-        embed = discord.Embed(title="Chestii generale de setat", description="",color=discord.Color.from_rgb(105, 105, 105))
-        embed.add_field(name="Rulati `.setup importante`", value="pentru a vedea setarile mai importante (prefix, sistem xp, reacyion roles, etc)", inline=False)
-        embed.add_field(name="Rulati `.setup canale`", value="pentru a vedea setarile ce implica canale (logs, join-leave, membercount, invites, etc)", inline=False)
+        if panel == None:
+            embed = discord.Embed(title="Setup bot",
+                                  description="Botul va ofera o serie de chestii de setat. Sunt total optionale, insa recomandate!",
+                                  color=discord.Color.from_rgb(105, 105, 105))
+            embed.add_field(name="Rulati `.setup general`", value="pentru a vedea sectiunea generala de setari\n\n",
+                            inline=False)
+            embed.add_field(name="Rulati `.setup fun`",
+                            value="pentru a vedea sectiunea de setari a functiilor 'amuzante'\n\n", inline=False)
+        elif "GENERAL" in panel.upper():
+            embed = discord.Embed(title="Chestii generale de setat", description="",
+                                  color=discord.Color.from_rgb(105, 105, 105))
+            embed.add_field(name="Rulati `.setup importante`",
+                            value="pentru a vedea setarile mai importante (prefix, sistem xp, reacyion roles, etc)",
+                            inline=False)
+            embed.add_field(name="Rulati `.setup canale`",
+                            value="pentru a vedea setarile ce implica canale (logs, join-leave, membercount, invites, etc)",
+                            inline=False)
 
-      elif "IMPORTANT" in panel.upper():
-        embed = discord.Embed(title="Chestii 'importante' de setat", description="",color=discord.Color.from_rgb(105, 105, 105))
-        embed.add_field(name="Prefixul", value="""il puteti schimba cu comanda `.setprefix`
+        elif "IMPORTANT" in panel.upper():
+            embed = discord.Embed(title="Chestii 'importante' de setat", description="",
+                                  color=discord.Color.from_rgb(105, 105, 105))
+            embed.add_field(name="Prefixul", value="""il puteti schimba cu comanda `.setprefix`
 (prefixul standard este '.' sau <@885503634710884412> )""", inline=False)
-        embed.add_field(name="Sistemul de XP",
-                        value="""il puteti porni/opri cu ajutorul comenzii `.setxp`.\n*Membrii vor primi xp pe mesajele scrise si vor avea acces la comenzile .xp si .top.""",
-                        inline=False)
-        embed.add_field(name="Comanda `.setrol`",
-                        value="E o extensie a sitemului xp. Folositi comanda pentru a recompensa membrii cu un numar mare de xp\n*Explicatii: daca setezi un rol creat de tine, spre exemplu* **Maestru** *pentru 100xp, toti membrii care vor atinge 100xp vor primi rolul de Maestru.*",
-                        inline=False)
-        embed.add_field(name="Reaction roles", value="""le puteti adauga in sistem cu comanda `.setreactionroles` (`.setreaction`). 
+            embed.add_field(name="Sistemul de XP",
+                            value="""il puteti porni/opri cu ajutorul comenzii `.setxp`.\n*Membrii vor primi xp pe mesajele scrise si vor avea acces la comenzile .xp si .top.""",
+                            inline=False)
+            embed.add_field(name="Comanda `.setrol`",
+                            value="E o extensie a sitemului xp. Folositi comanda pentru a recompensa membrii cu un numar mare de xp\n*Explicatii: daca setezi un rol creat de tine, spre exemplu* **Maestru** *pentru 100xp, toti membrii care vor atinge 100xp vor primi rolul de Maestru.*",
+                            inline=False)
+            embed.add_field(name="Reaction roles", value="""le puteti adauga in sistem cu comanda `.setreactionroles` (`.setreaction`). 
         *Puteti seta mesaje personalizate, cand cineva va reactiona cu un anumit emoji va primi un rol setat.*""",
-                        inline=False)
+                            inline=False)
 
-      elif "CANAL" in panel.upper():   
-        embed = discord.Embed(title="Chestii ce contin canale de setat", description="",color=discord.Color.from_rgb(105, 105, 105))                  
-        embed.add_field(name="Canalul de logs", value="""il puteti adauga in sistem cu comanda `.setlogs`. 
-*Pe canalul de logs vor aparea: mesajele,sterse/editate, pozele si videoclipurile sterse, comenzile folosite, membrii intrati/ieșiți si multe altele.*""",inline=False)
-        embed.add_field(name="Canalul de intrari-iesiri", value="""il puteți adauga in sistem cu comanda `.setjoinleave`.
+        elif "CANAL" in panel.upper():
+            embed = discord.Embed(title="Chestii ce contin canale de setat", description="",
+                                  color=discord.Color.from_rgb(105, 105, 105))
+            embed.add_field(name="Canalul de logs", value="""il puteti adauga in sistem cu comanda `.setlogs`. 
+*Pe canalul de logs vor aparea: mesajele,sterse/editate, pozele si videoclipurile sterse, comenzile folosite, membrii intrati/ieșiți si multe altele.*""",
+                            inline=False)
+            embed.add_field(name="Canalul de intrari-iesiri", value="""il puteți adauga in sistem cu comanda `.setjoinleave`.
 *Pe acest canal va aparea un mesaj cand intra sau iese un membru.*""", inline=False)
-        embed.add_field(name="Canalul de invite-uri", value="""il puteți adauga in sistem cu comanda `.setinvites`.
-*Pe acest canal va aparea un mesaj cand intra cine, plus informatii despre cine l-a invitat pe server.*""", inline=False)
-        embed.add_field(name="Un mesaj de întâmpinare pentru cei nou veniti", value="""il puteti adauga in sistem cu comanda `.setmesaj`.
+            embed.add_field(name="Canalul de invite-uri", value="""il puteți adauga in sistem cu comanda `.setinvites`.
+*Pe acest canal va aparea un mesaj cand intra cine, plus informatii despre cine l-a invitat pe server.*""",
+                            inline=False)
+            embed.add_field(name="Un mesaj de întâmpinare pentru cei nou veniti", value="""il puteti adauga in sistem cu comanda `.setmesaj`.
 *Membrii noi vor fi intampinati in privat și/sau pe un canal ales cu acel mesaj.*""", inline=False)
-        embed.add_field(name="Canalul intermediar de voice", value="""il puteți adauga cu comanda `.setvoice`.
+            embed.add_field(name="Canalul intermediar de voice", value="""il puteți adauga cu comanda `.setvoice`.
 *Oricine va intra pe canalul vocal setat va fi mutat pe un alt canal personalizat (ex: membrul DENIS#5251 va fi mutat pe 'CANALUL LUI DENIS#5251'), avand mai multe permisiuni (rulează .help voice)*""",
-                        inline=False)
-        embed.add_field(name="Canalul de evidenta a membrilor", value="""il puteti adauga in sistem cu comanda `.setcount`/`.setmembercount`.
+                            inline=False)
+            embed.add_field(name="Canalul de evidenta a membrilor", value="""il puteti adauga in sistem cu comanda `.setcount`/`.setmembercount`.
 *Numele canalului va fi schimbat odata la ceva timp , conținând numarul de membrii aflati in server. (exemplu: `Membrii:200`)*""",
-                        inline=False)
+                            inline=False)
+            embed.set_footer(
+                text=f"Comenzile va ajuta la configurare, pentru orice neintelegeri, adresati-va fondatorilor bot-ului pe serverul de asistenta tehnica (comanda `.support `).")
+
+        elif "FUN" in panel.upper() or "AMUZAMENT" in panel.upper():
+            embed = discord.Embed(title="Chestii 'amuzante' de setat", description="",
+                                  color=discord.Color.from_rgb(105, 105, 105))
+            embed.add_field(name="Birthday (comanda `.setbirthday`)",
+                            value="Botul contine comanda `.birthday` prin care membrii isi pot seta ziua de nastere.\nTu, ca si administrator al serverului poti sa le oferi un rol de sarbatorit (care va fi automat dat la inceputul zilei si scos in ziua urmatoare) si un canal pe care doriti ca botul sa ii trimita o urare.",
+                            inline=False)
+
         embed.set_footer(
             text=f"Comenzile va ajuta la configurare, pentru orice neintelegeri, adresati-va fondatorilor bot-ului pe serverul de asistenta tehnica (comanda `.support `).")
-
-      elif "FUN" in panel.upper() or "AMUZAMENT" in panel.upper():
-        embed = discord.Embed(title="Chestii 'amuzante' de setat", description="",color=discord.Color.from_rgb(105, 105, 105))                  
-        embed.add_field(name="Birthday (comanda `.setbirthday`)", value="Padurarul contine comanda `.birthday` prin care membrii isi pot seta ziua de nastere.\nTu, ca si administrator al serverului poti sa le oferi un rol de sarbatorit (care va fi automat dat la inceputul zilei si scos in ziua urmatoare) si un canal pe care doriti ca Padurarul sa ii trimita o urare.",inline=False)
-
-      embed.set_footer(text=f"Comenzile va ajuta la configurare, pentru orice neintelegeri, adresati-va fondatorilor bot-ului pe serverul de asistenta tehnica (comanda `.support `).")
-      await ctx.reply(embed=embed)
+        await ctx.reply(embed=embed)
 
     @commands.command(aliases=['suport'])
     async def support(self, ctx):
-        guild = self.client.get_guild(619454105869352961)
-        if int(guild.premium_subscription_count) < 30:
+        try:
+          guild = self.client.get_guild(619454105869352961)
+          if int(guild.premium_subscription_count) < 30:
             embed = discord.Embed(title="Salut! Spune-ne ce e gresit pe serverul nostru! ",
-                                  description="https://discord.gg/JatxtRC", color=discord.Color.green())
-        else:
+                                  description="https://discord.gg/JatxtRC", color=default_color)
+          else:
             embed = discord.Embed(title="Salut! Spune-ne ce e gresit pe serverul nostru! ",
-                                  description="https://discord.gg/baneasa", color=discord.Color.green())
-        await ctx.reply(embed=embed)
+                                  description="https://discord.gg/baneasa", color=default_color)
+          await ctx.reply(embed=embed)
+        except:
+          embed = discord.Embed(title="Salut! Spune-ne ce e gresit pe serverul nostru! ",
+                                  description="https://discord.gg/JatxtRC", color=default_color)
+          await ctx.reply(embed=embed)
+          
 
     @commands.command()
     @commands.has_permissions(administrator=True)
@@ -1679,5 +1704,5 @@ class Setup(commands.Cog):
                 pass
 
 
-def setup(client):
-    client.add_cog(Setup(client))
+async def setup(client):
+    await client.add_cog(Setup(client))

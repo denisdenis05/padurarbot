@@ -4,14 +4,11 @@ import json
 import datetime
 from discord.ext import commands
 from datetime import datetime
-
+from main import default_color
 
 class Utils(commands.Cog):
     def __init__(self, client):
         self.client = client
-
-
-
 
     @commands.command(aliases=['vocal'])
     @commands.cooldown(2, 15, commands.BucketType.user)
@@ -39,7 +36,7 @@ class Utils(commands.Cog):
                     "N-ai acces sa schimbi ceva la canalul vocal. Daca cel care a facut canalul a iesit, foloseste comanda .voice claim")
                 return
             await ctx.author.voice.channel.edit(user_limit=int(numar))
-            embed = discord.Embed(title="", description="", color=discord.Color.green())
+            embed = discord.Embed(title="", description="", color=default_color)
             embed.add_field(name=f'Gata flăcău', value=f"Ai limita de {int(numar)} persoane pe vocal.")
             await ctx.reply(embed=embed)
 
@@ -63,7 +60,7 @@ class Utils(commands.Cog):
                 staff: discord.PermissionOverwrite(connect=True)
             }
             await ctx.author.voice.channel.edit(overwrites=overwrites2)
-            embed = discord.Embed(title="", description="", color=discord.Color.green())
+            embed = discord.Embed(title="", description="", color=default_color)
             embed.add_field(name=f'Gata flăcău', value=f"Nimeni altcineva nu mai poate intra pe canalul tau")
             await ctx.reply(embed=embed)
 
@@ -91,7 +88,7 @@ class Utils(commands.Cog):
                 staff: discord.PermissionOverwrite(connect=True)
             }
             await ctx.author.voice.channel.edit(overwrites=overwrites2)
-            embed = discord.Embed(title="", description="", color=discord.Color.green())
+            embed = discord.Embed(title="", description="", color=default_color)
             embed.add_field(name=f'Gata flăcău', value=f"Canalul tau e deschis la lume")
             await ctx.reply(embed=embed)
 
@@ -108,7 +105,7 @@ class Utils(commands.Cog):
                     "N-ai acces sa schimbi ceva la canalul vocal. Daca cel care a facut canalul a iesit, foloseste comanda .voice claim")
                 return
             await ctx.author.voice.channel.edit(name=numar)
-            embed = discord.Embed(title="", description="", color=discord.Color.green())
+            embed = discord.Embed(title="", description="", color=default_color)
             embed.add_field(name=f'Gata flăcău', value=f"Canalul tau e se numeste {numar}")
             await ctx.reply(embed=embed)
 
@@ -135,7 +132,7 @@ class Utils(commands.Cog):
                 member: discord.PermissionOverwrite(connect=True)
             }
             await ctx.author.voice.channel.edit(overwrites=overwrites2)
-            embed = discord.Embed(title="", description="", color=discord.Color.green())
+            embed = discord.Embed(title="", description="", color=default_color)
             embed.add_field(name=f'Gata flăcău', value=f"Domnul {member} are acces la canalul tau")
             await ctx.reply(embed=embed)
 
@@ -162,7 +159,7 @@ class Utils(commands.Cog):
                 member: discord.PermissionOverwrite(connect=False)
             }
             await ctx.author.voice.channel.edit(overwrites=overwrites2)
-            embed = discord.Embed(title="", description="", color=discord.Color.green())
+            embed = discord.Embed(title="", description="", color=default_color)
             embed.add_field(name=f'Gata flăcău', value=f"Domnul {member} nu mai are acces la canalul tau")
             await ctx.reply(embed=embed)
 
@@ -192,12 +189,12 @@ class Utils(commands.Cog):
                     membru: discord.PermissionOverwrite(view_channel=True),
                     staff: discord.PermissionOverwrite(connect=True)
                 }
-                embed = discord.Embed(title="", description="", color=discord.Color.green())
+                embed = discord.Embed(title="", description="", color=default_color)
                 embed.add_field(name=f'Gata flăcău',
                                 value=f"Canalul iti apartine. Foloseste **.help voice** sa vezi ce poti face.")
                 await ctx.reply(embed=embed)
             else:
-                embed = discord.Embed(title="", description="", color=discord.Color.green())
+                embed = discord.Embed(title="", description="", color=default_color)
                 embed.add_field(name=f'Vesti proaste domnule', value=f"Canalul ii apartine lui {apartinator}.")
                 await ctx.reply(embed=embed)
 
@@ -206,9 +203,9 @@ class Utils(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             em = discord.Embed(title=f"HOOOO DOMNULE",
                                description=f" Ai de asteptat {error.retry_after:.2f} secunde pana poti face ceva iar",
-                               color=discord.Color.green())
+                               color=default_color)
             await ctx.reply(embed=em)
 
 
-def setup(client):
-    client.add_cog(Utils(client))
+async def setup(client):
+    await client.add_cog(Utils(client))

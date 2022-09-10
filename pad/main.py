@@ -1,30 +1,43 @@
 import discord
-import discord_components
 import os
-import aiohttp
 import datetime
+import aiohttp
 import json
+import asyncio
 from discord.ext import commands
-from discord_components import DiscordComponents, Button, ButtonStyle
 
 
 custom_prefixes = {}
-default_prefixes=['.', '<@885503634710884412> ','<!@885503634710884412> ']
+default_prefixes = ['.', '<@885503634710884412> ', '<!@885503 634710884412> ']
+default_color=discord.Color.from_rgb(255, 255, 0)
+secondary_color=discord.Color.from_rgb(255, 0, 0)
+
+
 async def determine_prefix(bot, message):
     guild = message.guild
     with open("pad/data/data.json", "r") as jsonFile:
-      data = json.load(jsonFile)
-      jsonFile.close()
-    if f"prefix{guild.id}" in data and data[f"prefix{guild.id}"]!=0:
+        data = json.load(jsonFile)
+        jsonFile.close()
+    if f"prefix{guild.id}" in data and data[f"prefix{guild.id}"] != 0:
         return data[f"prefix{guild.id}"]
     else:
         return default_prefixes
 
-intents = discord.Intents.default()
+class Buttons(discord.ui.View):
+    def __init__(self, *, timeout=180):
+        super().__init__(timeout=timeout)
+
+class Select(discord.ui.Select):
+    def __init__(self):
+        super().__init__(placeholder="Alege o optiune",max_values=1,min_values=1)
+      
+intents = discord.Intents.all() #all
 intents.members = True
-client = commands.Bot(command_prefix = determine_prefix,help_command=None, intents=intents,case_insensitive=True)
-client.session = aiohttp.ClientSession()
-DiscordComponents(client)
+client = commands.Bot(command_prefix=determine_prefix,
+                      help_command=None,
+                      intents=intents,
+                      case_insensitive=True)
+
 
 invites={}
 membriicache={}
@@ -35,27 +48,29 @@ motivafk={}
 numeafk={}
 incaafk={}
 
-async def timeout_user(*, user_id: int, guild_id: int, until):
-    headers = {"Authorization": f"Bot {client.http.token}"}
-    url = f"https://discord.com/api/v9/guilds/{guild_id}/members/{user_id}"
-    timeout = (datetime.datetime.utcnow() + datetime.timedelta(minutes=until)).isoformat()
-    json = {'communication_disabled_until': timeout}
-    async with client.session.patch(url, json=json, headers=headers) as session:
-        if session.status in range(200, 299):
-           return True
-        return False
+
 
 
 @client.command()
-async def load(ctx,extension):
-  client.load_extension(f'cogs.{extension}')
+async def load(ctx, extension):
+    client.load_extension(f'cogs.{extension}')
+
 
 @client.command()
-async def unload(ctx,extension):
-  client.unload_extension(f'cogs.{extension}')
+async def unload(ctx, extension):
+    client.unload_extension(f'cogs.{extension}')
 
-for filename in os.listdir('pad/cogs'):
-  if filename.endswith('.py'):
-    client.load_extension(f'cogs.{filename[:-3]}')
+async def load_extensions():
+  for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        await client.load_extension(f'cogs.{filename[:-3]}')
 
-client.run(token)
+async def main():
+    async with client:
+        await load_extensions()
+        await client.start('TOKEN')
+
+try:
+    asyncio.run(main())
+except:
+    pass
