@@ -25,7 +25,7 @@ Bot's main language: Romanian
 
 > Use the `.setup` command to set up things such as the prefix, logging channel, etc
 
-###If you change the "pad" folder's name the bot won't work.
+### If you change the "pad" folder's name the bot won't work.
 
 ## Why is everything in the "pad" folder:
 Good question. I run the bot on a Ubuntu server from the "pad" folder.
