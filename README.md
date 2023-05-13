@@ -25,8 +25,8 @@ Bot's main language: Romanian
 ### Economy system:
 <br><br>
 ![main2](https://imgur.com/gFlpUtD.jpeg)
-<br><br>!
-[main2](https://imgur.com/VRPfRCz.jpeg)
+<br><br>
+![main2](https://imgur.com/VRPfRCz.jpeg)
 <br><br>
 ![main2](https://imgur.com/LgBTZAk.jpeg)
 <br><br>
