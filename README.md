@@ -1,5 +1,5 @@
 # padurarbot
-A multifunctional python bot (w discord.py API). 
+A multifunctional python bot (w discord.py API). The official release can be used [here](https://top.gg/bot/885503634710884412).
 
 Bot's main language: Romanian
 
@@ -12,7 +12,26 @@ Bot's main language: Romanian
 
 > Miscelanous
 
+# Some examples:
 
+### Pic manipulation (using the profile pic or any attached image):
+<br><br>
+![main2](https://imgur.com/98clWHm.jpeg)
+<br><br>
+![main2](https://imgur.com/UGEOwpu.jpeg)
+<br><br>
+![main2](https://imgur.com/1cE8ZiB.jpeg)
+
+### Economy system:
+<br><br>
+![main2](https://imgur.com/gFlpUtD.jpeg)
+<br><br>!
+[main2](https://imgur.com/VRPfRCz.jpeg)
+<br><br>
+![main2](https://imgur.com/LgBTZAk.jpeg)
+<br><br>
+![main2](https://imgur.com/HI7H0EL.jpeg)
+<br><br>
 
 # Important stuff:
 
